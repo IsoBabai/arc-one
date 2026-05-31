@@ -754,6 +754,120 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
   to { opacity:1 }
 }
 
+
+/* ════════════════════════════════
+   SEND MODE TOGGLE
+════════════════════════════════ */
+.send-mode-wrap{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;
+  background:var(--fog);padding:4px;border-radius:10px;
+}
+.send-mode-btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 8px;border-radius:8px;border:none;background:none;
+  font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:var(--mist);cursor:pointer;transition:all .22s;
+}
+.send-mode-btn.active{
+  background:white;color:var(--sky);
+  box-shadow:0 2px 8px rgba(14,165,233,.12);
+}
+.send-mode-btn:hover:not(.active){color:var(--steel)}
+.smode-icon{font-size:13px}
+
+/* ════════════════════════════════
+   AI CHAT INTERFACE
+════════════════════════════════ */
+.ai-chat-wrap{
+  min-height:200px;max-height:240px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:10px;
+  padding:12px 0;margin-bottom:10px;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.ai-chat-wrap::-webkit-scrollbar{width:3px}
+.ai-chat-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+.ai-msg{display:flex;align-items:flex-start;gap:8px;animation:msgIn .3s ease both}
+.ai-msg-bot{align-items:flex-start}
+.ai-msg-user{flex-direction:row-reverse}
+
+.ai-msg-avatar{
+  width:26px;height:26px;border-radius:7px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;
+  background:linear-gradient(135deg,var(--sky),var(--ink2));color:white;
+}
+.ai-msg-user .ai-msg-avatar{background:var(--fog);color:var(--steel);border:1px solid var(--border)}
+
+.ai-msg-bubble{
+  max-width:85%;padding:9px 12px;border-radius:12px;
+  font-size:12px;line-height:1.55;
+}
+.ai-msg-bot .ai-msg-bubble{
+  background:var(--fog);color:var(--ink);border:1px solid var(--border);
+  border-bottom-left-radius:3px;
+}
+.ai-msg-user .ai-msg-bubble{
+  background:linear-gradient(135deg,var(--sky),var(--ink2));
+  color:white;border-bottom-right-radius:3px;
+}
+.ai-msg-bubble em{color:var(--sky);font-style:normal;font-weight:600}
+.ai-msg-bubble a{color:var(--sky);text-decoration:none}
+.ai-msg-bubble a:hover{text-decoration:underline}
+.ai-msg-bubble strong{font-weight:700}
+
+/* Typing indicator */
+.ai-typing{display:inline-flex;gap:3px;padding:10px 13px;background:var(--fog);border:1px solid var(--border);border-radius:12px;border-bottom-left-radius:3px}
+.ai-typing span{width:5px;height:5px;background:var(--sky);border-radius:50%;animation:dot1 1.4s ease-in-out infinite}
+.ai-typing span:nth-child(2){animation-delay:.18s}
+.ai-typing span:nth-child(3){animation-delay:.36s}
+
+/* Input row */
+.ai-input-row{
+  display:flex;gap:6px;align-items:center;
+  background:var(--fog);border:1px solid var(--border2);
+  border-radius:10px;padding:4px 4px 4px 12px;
+  transition:border-color .2s;
+}
+.ai-input-row:focus-within{border-color:var(--sky);box-shadow:0 0 0 3px rgba(14,165,233,.08)}
+.ai-input{
+  flex:1;border:none;background:none;outline:none;
+  font-family:var(--font-mono);font-size:12px;color:var(--ink);
+  padding:6px 0;
+}
+.ai-input::placeholder{color:var(--smoke)}
+.ai-send-btn{
+  width:30px;height:30px;border-radius:7px;border:none;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sky),var(--ink2));color:white;
+  font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.ai-send-btn:hover{transform:scale(1.08);box-shadow:0 2px 10px rgba(14,165,233,.3)}
+
+/* Quick command chips */
+.ai-quick-cmds{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.ai-quick{
+  padding:4px 10px;border:1px solid var(--border2);border-radius:100px;
+  background:white;font-size:10px;font-weight:600;letter-spacing:.4px;
+  color:var(--steel);cursor:pointer;transition:all .18s;font-family:var(--font);
+  text-transform:uppercase;
+}
+.ai-quick:hover{border-color:var(--sky);color:var(--sky);background:rgba(14,165,233,.05)}
+
+/* AI action card — shown when AI wants to execute a tx */
+.ai-action-card{
+  background:white;border:1px solid var(--border2);border-radius:10px;
+  padding:12px 14px;margin-top:6px;
+}
+.ai-action-title{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mist);margin-bottom:8px;font-family:var(--font-mono)}
+.ai-action-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--steel);font-family:var(--font-mono)}
+.ai-action-row strong{color:var(--ink)}
+.ai-action-btns{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.ai-confirm-btn{padding:9px;border-radius:8px;background:linear-gradient(135deg,var(--sky),var(--ink2));color:white;border:none;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-family:var(--font);cursor:pointer;transition:all .2s}
+.ai-confirm-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(14,165,233,.3)}
+.ai-cancel-btn{padding:9px;border-radius:8px;background:white;color:var(--steel);border:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-family:var(--font);cursor:pointer;transition:all .2s}
+.ai-cancel-btn:hover{border-color:var(--ruby);color:var(--ruby)}
+
 </style>
 </head>
 <body>
@@ -892,24 +1006,63 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
             <button class="wtab" id="tab-faucet" onclick="switchTab('faucet')">Faucet</button>
           </div>
           <div class="w-pane active" id="pane-send">
-            <div class="sf-row">
-              <label class="sf-lbl">Recipient address</label>
-              <input class="sf-input" id="toAddr" placeholder="0x0000...0000" spellcheck="false" autocomplete="off">
+
+            <!-- ── SEND MODE TOGGLE ── -->
+            <div class="send-mode-wrap">
+              <button class="send-mode-btn active" id="modeManual" onclick="setSendMode('manual')">
+                <span class="smode-icon">⬆</span> Manual Send
+              </button>
+              <button class="send-mode-btn" id="modeAI" onclick="setSendMode('ai')">
+                <span class="smode-icon">✦</span> AI Assistant
+              </button>
             </div>
-            <div class="sf-row">
-              <label class="sf-lbl">Amount</label>
-              <div class="amt-wrap"><input class="sf-input" id="sendAmt" type="number" min="0.0001" step="0.0001" placeholder="0.0000"><span class="amt-sfx">USDC</span></div>
+
+            <!-- ── MANUAL SEND ── -->
+            <div id="manualSend">
+              <div class="sf-row">
+                <label class="sf-lbl">Recipient address</label>
+                <input class="sf-input" id="toAddr" placeholder="0x0000...0000" spellcheck="false" autocomplete="off">
+              </div>
+              <div class="sf-row">
+                <label class="sf-lbl">Amount</label>
+                <div class="amt-wrap">
+                  <input class="sf-input" id="sendAmt" type="number" min="0.0001" step="0.0001" placeholder="0.0000">
+                  <span class="amt-sfx">USDC</span>
+                </div>
+              </div>
+              <div class="gas-box" id="gasBox">
+                <div class="gp-row"><span>Amount</span><span id="gpAmt">—</span></div>
+                <div class="gp-row"><span>Est. gas (USDC)</span><span id="gpFee">—</span></div>
+                <div class="gp-row total"><span>Total</span><span id="gpTotal">—</span></div>
+              </div>
+              <div class="sf-btns">
+                <button class="btn-est" onclick="estimateGas()">Est. Gas</button>
+                <button class="btn-snd" id="sendBtn" onclick="doSend()">Send →</button>
+              </div>
+              <div class="tx-msg" id="txMsg"></div>
             </div>
-            <div class="gas-box" id="gasBox">
-              <div class="gp-row"><span>Amount</span><span id="gpAmt">—</span></div>
-              <div class="gp-row"><span>Est. gas (USDC)</span><span id="gpFee">—</span></div>
-              <div class="gp-row total"><span>Total</span><span id="gpTotal">—</span></div>
+
+            <!-- ── AI ASSISTANT ── -->
+            <div id="aiSend" style="display:none">
+              <div class="ai-chat-wrap" id="aiChatWrap">
+                <div class="ai-msg ai-msg-bot">
+                  <div class="ai-msg-avatar">✦</div>
+                  <div class="ai-msg-bubble">Hey! I'm Arc One AI. Tell me what you want to do — I'll handle the details.<br><br>Try: <em>"Send 0.5 USDC to 0x1234…"</em></div>
+                </div>
+              </div>
+              <div class="ai-input-row">
+                <input class="ai-input" id="aiInput" placeholder="Send USDC, check balance, estimate gas…" autocomplete="off"
+                  onkeydown="if(event.key==='Enter')sendAIMessage()">
+                <button class="ai-send-btn" onclick="sendAIMessage()">↑</button>
+              </div>
+              <div class="ai-quick-cmds">
+                <button class="ai-quick" onclick="setAIInput(this)">Send USDC</button>
+                <button class="ai-quick" onclick="setAIInput(this)">Check balance</button>
+                <button class="ai-quick" onclick="setAIInput(this)">Estimate gas</button>
+                <button class="ai-quick" onclick="setAIInput(this)">Open faucet</button>
+              </div>
             </div>
-            <div class="sf-btns">
-              <button class="btn-est" onclick="estimateGas()">Est. Gas</button>
-              <button class="btn-snd" id="sendBtn" onclick="doSend()">Send →</button>
-            </div>
-            <div class="tx-msg" id="txMsg"></div>
+
           </div>
           <div class="w-pane" id="pane-history">
             <div id="txHistEl"><div class="tx-empty">No transactions yet.</div></div>
@@ -917,7 +1070,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           <div class="w-pane" id="pane-faucet">
             <p style="font-size:11px;color:var(--mist);margin-bottom:10px;font-family:var(--font-mono)">// Get free Arc Testnet USDC</p>
             <div class="fc-links">
-              <a class="fc-link" href="https://faucet.circle.com" target="_blank">Circle USDC Faucet<span class="fc-badge">1 USDC/day</span></a>
+              <a class="fc-link" href="https://faucet.circle.com" target="_blank">Circle USDC Faucet (Official)<span class="fc-badge">Daily limit</span></a>
               <a class="fc-link" href="https://testnet.arcscan.app" target="_blank">Arc Explorer (arcscan.app) ↗<span class="fc-badge">Explorer</span></a>
               <a class="fc-link" href="https://thirdweb.com/arc-testnet" target="_blank">thirdweb Arc Faucet ↗<span class="fc-badge">Alt Faucet</span></a>
             </div>
@@ -1235,7 +1388,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           <div class="faq-sec-title">Faucet & USDC</div>
           <div class="faq-item">
             <div class="faq-q" onclick="tFaq(this)"><span class="faq-q-txt">Where do I get free testnet USDC?</span><div class="faq-chev">▾</div></div>
-            <div class="faq-a"><ul><li><a href="https://faucet.circle.com" target="_blank">faucet.circle.com</a> (Circle official) — 1 USDC/day, most reliable</li><li><a href="https://thirdweb.com/arc-testnet" target="_blank">thirdweb.com/arc-testnet</a> — alternative faucet</li></ul>Most faucets require signing in with a Google account or linking a wallet to prevent abuse.</div>
+            <div class="faq-a"><ul><li><a href="https://faucet.circle.com" target="_blank">faucet.circle.com</a> — Official Circle faucet, most reliable</li><li><a href="https://thirdweb.com/arc-testnet" target="_blank">thirdweb.com/arc-testnet</a> — alternative faucet</li></ul>Most faucets require signing in with a Google account or linking a wallet to prevent abuse.</div>
           </div>
           <div class="faq-item">
             <div class="faq-q" onclick="tFaq(this)"><span class="faq-q-txt">Can testnet USDC be exchanged for real money?</span><div class="faq-chev">▾</div></div>
@@ -1879,6 +2032,200 @@ function spawnSpark(){
   setTimeout(()=>s.remove(),10000);
 }
 setInterval(spawnSpark,900);
+
+// ════════════════════════════════════════
+// SEND MODE TOGGLE
+// ════════════════════════════════════════
+function setSendMode(mode){
+  const manual = document.getElementById('manualSend');
+  const ai = document.getElementById('aiSend');
+  const btnM = document.getElementById('modeManual');
+  const btnA = document.getElementById('modeAI');
+  if(mode==='manual'){
+    manual.style.display='block'; ai.style.display='none';
+    btnM.classList.add('active'); btnA.classList.remove('active');
+  } else {
+    manual.style.display='none'; ai.style.display='block';
+    btnA.classList.add('active'); btnM.classList.remove('active');
+    document.getElementById('aiInput').focus();
+  }
+}
+
+// ════════════════════════════════════════
+// AI ASSISTANT
+// ════════════════════════════════════════
+let aiPendingTx = null;
+
+function setAIInput(btn){ document.getElementById('aiInput').value = btn.textContent; document.getElementById('aiInput').focus(); }
+
+function addAIMsg(role, html){
+  const wrap = document.getElementById('aiChatWrap');
+  const div = document.createElement('div');
+  div.className = 'ai-msg ' + (role==='user' ? 'ai-msg-user' : 'ai-msg-bot');
+  div.innerHTML = `<div class="ai-msg-avatar">${role==='user'?'👤':'✦'}</div><div class="ai-msg-bubble">${html}</div>`;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return div;
+}
+
+function addTyping(){
+  const wrap = document.getElementById('aiChatWrap');
+  const div = document.createElement('div');
+  div.className = 'ai-msg ai-msg-bot'; div.id = 'aiTyping';
+  div.innerHTML = '<div class="ai-msg-avatar">✦</div><div class="ai-typing"><span></span><span></span><span></span></div>';
+  wrap.appendChild(div); wrap.scrollTop = wrap.scrollHeight;
+}
+function removeTyping(){ const el = document.getElementById('aiTyping'); if(el) el.remove(); }
+
+async function sendAIMessage(){
+  const input = document.getElementById('aiInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  addAIMsg('user', text);
+  addTyping();
+
+  // Small delay for natural feel
+  await new Promise(r => setTimeout(r, 700));
+  removeTyping();
+
+  const lower = text.toLowerCase();
+
+  // ── PARSE: Send command ──
+  const sendMatch = lower.match(/send\s+([\d.]+)\s*(?:usdc)?\s*to\s+(0x[0-9a-fa-f]{10,})/i)
+                 || text.match(/send\s+([\d.]+)\s*(?:USDC)?\s*to\s+(0x[0-9a-fA-F]{10,})/);
+  if(sendMatch){
+    const amt = sendMatch[1];
+    const addr = sendMatch[2] || text.match(/(0x[0-9a-fA-F]{40})/)?.[1];
+    if(!addr || !/^0x[0-9a-fA-F]{40}$/.test(addr)){
+      addAIMsg('bot','⚠️ I found an address but it looks incomplete. Please give the full 42-character address starting with <em>0x</em>.');
+      return;
+    }
+    if(parseFloat(amt) <= 0){ addAIMsg('bot','⚠️ Amount must be greater than 0.'); return; }
+    // Estimate gas if connected
+    let gasStr = '~calculating…';
+    if(ethProv && walletAddr){
+      try{
+        const value = ethers.utils.parseEther(amt);
+        const fd = await ethProv.getFeeData();
+        const gl = await ethProv.estimateGas({from:walletAddr, to:addr, value});
+        const fee = parseFloat(ethers.utils.formatEther(gl.mul(fd.gasPrice))).toFixed(7);
+        gasStr = fee + ' USDC';
+      }catch(e){ gasStr = 'unavailable'; }
+    }
+    aiPendingTx = { to: addr, amt };
+    addAIMsg('bot', `
+      Got it! Here's what I'll send:<br><br>
+      <div class="ai-action-card">
+        <div class="ai-action-title">Transaction Preview</div>
+        <div class="ai-action-row"><span>To</span><strong>${addr.slice(0,10)}…${addr.slice(-6)}</strong></div>
+        <div class="ai-action-row"><span>Amount</span><strong>${amt} USDC</strong></div>
+        <div class="ai-action-row"><span>Est. gas</span><strong>${gasStr}</strong></div>
+        <div class="ai-action-row"><span>Network</span><strong>Arc Testnet</strong></div>
+        <div class="ai-action-btns">
+          <button class="ai-confirm-btn" onclick="aiConfirmSend()">✓ Confirm & Send</button>
+          <button class="ai-cancel-btn" onclick="aiCancelTx()">✕ Cancel</button>
+        </div>
+      </div>
+    `);
+    return;
+  }
+
+  // ── PARSE: Balance ──
+  if(lower.includes('balance') || lower.includes('how much')){
+    if(!walletAddr){ addAIMsg('bot','🔒 You need to connect your wallet first. Click <em>Connect Wallet</em> to get started.'); return; }
+    addTyping(); await new Promise(r=>setTimeout(r,500)); removeTyping();
+    await refreshBal();
+    const bal = document.getElementById('wBal').textContent;
+    const usd = document.getElementById('wUsd').textContent;
+    addAIMsg('bot', `Your current balance is <strong>${bal} USDC</strong><br><span style="font-size:11px;color:var(--mist)">${usd}</span>`);
+    return;
+  }
+
+  // ── PARSE: Gas estimate ──
+  if(lower.includes('gas') || lower.includes('fee') || lower.includes('cost')){
+    addAIMsg('bot','To estimate gas, tell me the amount and address — for example:<br><br><em>"Send 1 USDC to 0xABC…"</em><br><br>I'll show the full cost breakdown before you confirm.');
+    return;
+  }
+
+  // ── PARSE: Faucet ──
+  if(lower.includes('faucet') || lower.includes('get usdc') || lower.includes('need usdc') || lower.includes('test usdc')){
+    addAIMsg('bot','🚰 Opening the Circle faucet for you…');
+    setTimeout(()=>{ window.open('https://faucet.circle.com','_blank'); }, 600);
+    return;
+  }
+
+  // ── PARSE: Explorer ──
+  if(lower.includes('explorer') || lower.includes('arcscan') || lower.includes('history') || lower.includes('transactions')){
+    if(walletAddr){
+      addAIMsg('bot','🔍 Opening your ArcScan address page…');
+      setTimeout(()=>{ window.open('https://testnet.arcscan.app/address/'+walletAddr,'_blank'); }, 500);
+    } else {
+      addAIMsg('bot','Connect your wallet first, then I can open your ArcScan history.');
+    }
+    return;
+  }
+
+  // ── PARSE: Help ──
+  if(lower.includes('help') || lower.includes('what can') || lower.includes('commands') || lower==='?'){
+    addAIMsg('bot',`Here's what I can do:<br><br>
+      <strong>💸 Send USDC</strong><br>
+      <em>"Send 2 USDC to 0xABC…"</em><br><br>
+      <strong>💰 Check balance</strong><br>
+      <em>"What's my balance?"</em><br><br>
+      <strong>⛽ Estimate gas</strong><br>
+      <em>"How much to send 5 USDC?"</em><br><br>
+      <strong>🚰 Get test USDC</strong><br>
+      <em>"Open faucet"</em><br><br>
+      <strong>🔍 View transactions</strong><br>
+      <em>"Show my history"</em>`);
+    return;
+  }
+
+  // ── PARSE: Greeting ──
+  if(lower.match(/^(hi|hello|hey|yo|sup|gm)[\s!.]*$/)){
+    const name = walletAddr ? walletAddr.slice(0,6)+'…' : 'there';
+    addAIMsg('bot', `Hey ${name}! 👋 I'm Arc One AI. I can send USDC, check your balance, estimate gas, or open the faucet.<br><br>What would you like to do?`);
+    return;
+  }
+
+  // ── DEFAULT fallback ──
+  addAIMsg('bot',`I'm not sure how to handle that yet. Try something like:<br><br>
+    <em>"Send 1 USDC to 0xABC…"</em><br>
+    <em>"Check my balance"</em><br>
+    <em>"Open faucet"</em><br>
+    <em>"Help"</em> — to see all commands`);
+}
+
+async function aiConfirmSend(){
+  if(!aiPendingTx){ addAIMsg('bot','No pending transaction found.'); return; }
+  if(!walletAddr || !sgn){ addAIMsg('bot','🔒 Connect your wallet first.'); return; }
+  const {to, amt} = aiPendingTx;
+  aiPendingTx = null;
+  // Remove the action card buttons so they can't double-fire
+  document.querySelectorAll('.ai-action-btns').forEach(el => el.remove());
+  addAIMsg('bot','⏳ Sending… Confirm in MetaMask.');
+  try{
+    const tx = await sgn.sendTransaction({to, value: ethers.utils.parseEther(amt)});
+    addAIMsg('bot', `📡 Submitted! Waiting for Arc confirmation…<br><a href="https://testnet.arcscan.app/tx/${tx.hash}" target="_blank">View on ArcScan ↗</a>`);
+    const receipt = await tx.wait(1);
+    spawnConfetti();
+    addAIMsg('bot', `✅ <strong>Done! ${amt} USDC sent.</strong><br>Block #${receipt.blockNumber}<br><a href="https://testnet.arcscan.app/tx/${tx.hash}" target="_blank">View on ArcScan ↗</a>`);
+    txLog.unshift({to, amt, hash: tx.hash});
+    updateHistory();
+    await refreshBal();
+  }catch(e){
+    if(e.code===4001||e.code==='ACTION_REJECTED') addAIMsg('bot','❌ Transaction cancelled by user.');
+    else addAIMsg('bot','❌ Transaction failed: '+(e.shortMessage||e.message));
+  }
+}
+
+function aiCancelTx(){
+  aiPendingTx = null;
+  document.querySelectorAll('.ai-action-btns').forEach(el => el.remove());
+  addAIMsg('bot','Transaction cancelled. What else can I help with?');
+}
+
 </script>
 </body>
 </html>
