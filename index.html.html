@@ -2144,7 +2144,7 @@ async function sendAIMessage(){
 
   // ── PARSE: Gas estimate ──
   if(lower.includes('gas') || lower.includes('fee') || lower.includes('cost')){
-    addAIMsg('bot','To estimate gas, tell me the amount and address — for example:<br><br><em>"Send 1 USDC to 0xABC…"</em><br><br>I'll show the full cost breakdown before you confirm.');
+    addAIMsg('bot','To estimate gas, tell me the amount and address — for example:<br><br><em>"Send 1 USDC to 0xABC…"</em><br><br>I\'ll show the full cost breakdown before you confirm.');
     return;
   }
 
@@ -2185,12 +2185,12 @@ async function sendAIMessage(){
   // ── PARSE: Greeting ──
   if(lower.match(/^(hi|hello|hey|yo|sup|gm)[\s!.]*$/)){
     const name = walletAddr ? walletAddr.slice(0,6)+'…' : 'there';
-    addAIMsg('bot', `Hey ${name}! 👋 I'm Arc One AI. I can send USDC, check your balance, estimate gas, or open the faucet.<br><br>What would you like to do?`);
+    addAIMsg('bot', `Hey ${name}! 👋 I\'m Arc One AI. I can send USDC, check your balance, estimate gas, or open the faucet.<br><br>What would you like to do?`);
     return;
   }
 
   // ── DEFAULT fallback ──
-  addAIMsg('bot',`I'm not sure how to handle that yet. Try something like:<br><br>
+  addAIMsg('bot',`I\'m not sure how to handle that yet. Try something like:<br><br>
     <em>"Send 1 USDC to 0xABC…"</em><br>
     <em>"Check my balance"</em><br>
     <em>"Open faucet"</em><br>
