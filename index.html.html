@@ -1127,8 +1127,8 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
             <div class="orb-center"><svg viewBox="0 0 24 24"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg></div>
           </div>
           <div class="wc-title">Connect your wallet</div>
-          <p class="wc-sub">Link MetaMask to Arc One. Send USDC on Arc Network. Sub-second finality.</p>
-          <button class="btn-connect-main" onclick="openConnect()">Connect with MetaMask</button>
+          <p class="wc-sub">Connect your wallet to Arc One. Send USDC on Arc Network. Sub-second finality.</p>
+          <button class="btn-connect-main" onclick="openConnect()">Connect Wallet</button>
           <div style="display:flex;align-items:center;gap:10px;margin:14px 0 0;width:100%;max-width:240px">
             <div style="flex:1;height:1px;background:var(--border)"></div>
             <span style="font-size:10px;color:var(--mist);font-family:var(--font-mono);letter-spacing:.5px">or</span>
@@ -1792,7 +1792,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
         <p class="cw-step-sub" style="margin:10px auto;max-width:280px">Your wallet is set up. Add it to MetaMask using your private key, then connect to Arc One.</p>
         <div class="cw-addr-box" id="cwSuccessAddr" style="text-align:left;margin:16px 0;font-size:11px"></div>
         <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
-          <button class="cw-btn-primary cw-btn-full" onclick="closeModal('createWalletModal');openConnect()">Connect with MetaMask →</button>
+          <button class="cw-btn-primary cw-btn-full" onclick="closeModal('createWalletModal');openConnect()">Connect Wallet →</button>
           <button class="cw-btn-secondary cw-btn-full" onclick="closeModal('createWalletModal')">Close</button>
         </div>
       </div>
@@ -2539,6 +2539,301 @@ function aiCancelTx(){
   aiPendingTx = null;
   document.querySelectorAll('.ai-action-btns').forEach(el => el.remove());
   addAIMsg('bot','Transaction cancelled. What else can I help with?');
+}
+
+// ══════════════════════════════════════════════
+// CREATE WALLET — IN-BROWSER WALLET GENERATION
+// ══════════════════════════════════════════════
+
+// State for the in-browser created wallet
+let cwWallet = null;   // ethers.Wallet instance
+let cwMnemonic = [];   // Array of 12 words
+let cwVerifySlots = []; // [{index, word}] for verification step
+
+// Copy text from an element to clipboard
+function copyText(id, label) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.querySelector('.cw-addr-text')?.textContent
+    || el.querySelector('.cw-secret-hidden, [id^="cwPrivKey"]')?.textContent
+    || el.textContent;
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    const btn = el.querySelector('.cw-copy-btn, button');
+    if (btn) { const orig = btn.textContent; btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = orig, 1500); }
+  }).catch(() => {});
+}
+
+// Open the create-wallet modal and reset to step 0
+function openCreateWallet() {
+  cwWallet = null;
+  cwMnemonic = [];
+  cwVerifySlots = [];
+  showCWStep(0);
+  openModal('createWalletModal');
+}
+
+// Show a specific step inside the modal
+function showCWStep(step) {
+  // Hide all steps
+  document.querySelectorAll('.cw-step').forEach(s => s.style.display = 'none');
+
+  if (step === 'import') {
+    document.getElementById('cw-step-import').style.display = 'block';
+    return;
+  }
+
+  const el = document.getElementById('cw-step-' + step);
+  if (el) el.style.display = 'block';
+
+  // Step-specific init
+  if (step === 1) {
+    // Update address display, preserving the Copy button
+    const addr = cwWallet ? cwWallet.address : '—';
+    const addrEl = document.getElementById('cwAddress');
+    if (addrEl) {
+      let span = addrEl.querySelector('.cw-addr-text');
+      if (!span) {
+        span = document.createElement('span');
+        span.className = 'cw-addr-text';
+        span.style.cssText = 'font-family:var(--font-mono);font-size:11px;word-break:break-all;flex:1;margin-right:8px;display:block';
+        addrEl.insertBefore(span, addrEl.firstChild);
+      }
+      span.textContent = addr;
+    }
+  }
+
+  if (step === 2) {
+    // Populate phrase grid
+    const grid = document.getElementById('cwPhraseGrid');
+    if (grid && cwMnemonic.length) {
+      grid.innerHTML = cwMnemonic.map((w, i) =>
+        `<div class="cw-word"><span class="cw-word-num">${i+1}</span>${w}</div>`
+      ).join('');
+    }
+    // Reset reveal state
+    if (grid) grid.classList.add('cw-secret-hidden');
+    const revBtn = document.getElementById('cwRevealBtn');
+    if (revBtn) { revBtn.style.display = 'block'; revBtn.textContent = '👁 Tap to Reveal Phrase'; }
+    // Reset checkbox & next button
+    const cb = document.getElementById('cwBackedUp');
+    if (cb) cb.checked = false;
+    const nxt = document.getElementById('cwStep2Next');
+    if (nxt) { nxt.disabled = true; nxt.style.opacity = '.4'; nxt.style.cursor = 'not-allowed'; }
+  }
+
+  if (step === 3) {
+    buildVerifyGrid();
+  }
+
+  if (step === 4) {
+    // Show private key (hidden by default)
+    const pkEl = document.getElementById('cwPrivKey');
+    if (pkEl && cwWallet) { pkEl.textContent = cwWallet.privateKey; pkEl.classList.add('cw-secret-hidden'); }
+    const revPK = document.getElementById('cwRevealPK');
+    if (revPK) { revPK.style.display = 'block'; revPK.textContent = '👁 Tap to Reveal Private Key'; }
+    // Reset checkbox & finish button
+    const cb = document.getElementById('cwSavedPK');
+    if (cb) cb.checked = false;
+    const fin = document.getElementById('cwFinishBtn');
+    if (fin) { fin.disabled = true; fin.style.opacity = '.4'; fin.style.cursor = 'not-allowed'; }
+  }
+}
+
+// Step 1: actually generate a new wallet
+function startCreateWallet() {
+  try {
+    cwWallet = ethers.Wallet.createRandom();
+    cwMnemonic = cwWallet.mnemonic.phrase.split(' ');
+    // Show wallet address
+    const addrEl = document.getElementById('cwAddress');
+    if (addrEl) addrEl.textContent = cwWallet.address;
+    showCWStep(1);
+  } catch(e) {
+    alert('Failed to generate wallet: ' + e.message);
+  }
+}
+
+// Step 2: reveal the seed phrase
+function revealPhrase() {
+  const grid = document.getElementById('cwPhraseGrid');
+  if (grid) grid.classList.remove('cw-secret-hidden');
+  const btn = document.getElementById('cwRevealBtn');
+  if (btn) btn.style.display = 'none';
+}
+
+// Step 2: toggle "I've backed up" checkbox → unlock Next button
+function toggleCheck(id) {
+  const cb = document.getElementById(id);
+  if (!cb) return;
+  cb.checked = !cb.checked;
+
+  if (id === 'cwBackedUp') {
+    const nxt = document.getElementById('cwStep2Next');
+    if (nxt) {
+      nxt.disabled = !cb.checked;
+      nxt.style.opacity = cb.checked ? '1' : '.4';
+      nxt.style.cursor = cb.checked ? 'pointer' : 'not-allowed';
+    }
+  }
+
+  if (id === 'cwSavedPK') {
+    const fin = document.getElementById('cwFinishBtn');
+    if (fin) {
+      fin.disabled = !cb.checked;
+      fin.style.opacity = cb.checked ? '1' : '.4';
+      fin.style.cursor = cb.checked ? 'pointer' : 'not-allowed';
+    }
+  }
+}
+
+// Step 3: build the verification grid (pick 3 random words)
+function buildVerifyGrid() {
+  const grid = document.getElementById('cwVerifyGrid');
+  if (!grid || !cwMnemonic.length) return;
+
+  // Pick 3 random positions to verify
+  const indices = [];
+  while (indices.length < 3) {
+    const r = Math.floor(Math.random() * 12);
+    if (!indices.includes(r)) indices.push(r);
+  }
+  indices.sort((a,b) => a-b);
+  cwVerifySlots = indices.map(i => ({ index: i, word: cwMnemonic[i] }));
+
+  grid.innerHTML = cwVerifySlots.map((slot, si) => `
+    <div class="cw-verify-slot" style="margin-bottom:12px">
+      <label class="cw-addr-label">Word #${slot.index + 1}</label>
+      <input class="sf-input" type="text" id="cwVerify_${si}"
+        placeholder="Enter word ${slot.index + 1}…"
+        oninput="checkVerify()"
+        autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+  `).join('');
+
+  // Reset next button
+  const nxt = document.getElementById('cwStep3Next');
+  if (nxt) { nxt.disabled = true; nxt.style.opacity = '.4'; nxt.style.cursor = 'not-allowed'; }
+}
+
+// Step 3: check if all verification words are correct
+function checkVerify() {
+  const allCorrect = cwVerifySlots.every((slot, si) => {
+    const inp = document.getElementById('cwVerify_' + si);
+    return inp && inp.value.trim().toLowerCase() === slot.word.toLowerCase();
+  });
+  const nxt = document.getElementById('cwStep3Next');
+  if (nxt) {
+    nxt.disabled = !allCorrect;
+    nxt.style.opacity = allCorrect ? '1' : '.4';
+    nxt.style.cursor = allCorrect ? 'pointer' : 'not-allowed';
+  }
+}
+
+// Step 4: reveal the private key
+function revealPK() {
+  const pkEl = document.getElementById('cwPrivKey');
+  if (pkEl) pkEl.classList.remove('cw-secret-hidden');
+  const btn = document.getElementById('cwRevealPK');
+  if (btn) btn.style.display = 'none';
+}
+
+// Step 4: finish — auto-connect with the generated wallet
+async function finishCreateWallet() {
+  if (!cwWallet) return;
+
+  // Show success step with wallet info
+  const successAddr = document.getElementById('cwSuccessAddr');
+  if (successAddr) {
+    successAddr.innerHTML = `
+      <div style="margin-bottom:8px"><strong>Address:</strong><br>
+        <span style="font-family:var(--font-mono);font-size:11px;word-break:break-all">${cwWallet.address}</span>
+      </div>
+      <div><strong>Network:</strong> Arc Testnet (Chain 5042002)</div>
+    `;
+  }
+  showCWStep('success');
+
+  // Auto-connect using the generated wallet's provider
+  try {
+    const provider = new ethers.providers.JsonRpcProvider(ARC_RPC, {
+      chainId: 5042002,
+      name: 'Arc Testnet'
+    });
+    const connectedWallet = cwWallet.connect(provider);
+    walletAddr = cwWallet.address;
+    ethProv = provider;
+    sgn = connectedWallet;
+    await onConn();
+  } catch(e) {
+    // Connection to RPC may fail on testnet; wallet is still shown as ready
+    console.warn('Auto-connect to Arc RPC failed:', e.message);
+    // Still update UI minimally so user knows the wallet was created
+    const btn = document.getElementById('connectBtn');
+    if (btn) {
+      btn.textContent = cwWallet.address.slice(0,6) + '…' + cwWallet.address.slice(-4);
+      btn.classList.add('connected');
+    }
+  }
+}
+
+// Import wallet from seed phrase or private key
+async function importWallet() {
+  const input = document.getElementById('cwImportInput');
+  const msg = document.getElementById('cwImportMsg');
+  const raw = input ? input.value.trim() : '';
+
+  function showImportMsg(type, text) {
+    if (!msg) return;
+    msg.style.display = 'block';
+    msg.className = 'tx-msg ' + type;
+    msg.textContent = text;
+  }
+
+  if (!raw) { showImportMsg('error', 'Please enter your seed phrase or private key.'); return; }
+
+  try {
+    let wallet;
+    const words = raw.split(/\s+/);
+
+    if (words.length === 12 || words.length === 24) {
+      // Mnemonic
+      wallet = ethers.Wallet.fromMnemonic(raw);
+    } else if (/^0x[0-9a-fA-F]{64}$/.test(raw)) {
+      // Private key
+      wallet = new ethers.Wallet(raw);
+    } else {
+      showImportMsg('error', 'Invalid input. Enter a 12-word seed phrase or a 0x private key (64 hex chars).');
+      return;
+    }
+
+    cwWallet = wallet;
+    showImportMsg('info', 'Wallet imported! Connecting…');
+
+    // Auto-connect
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(ARC_RPC, {
+        chainId: 5042002, name: 'Arc Testnet'
+      });
+      const connectedWallet = wallet.connect(provider);
+      walletAddr = wallet.address;
+      ethProv = provider;
+      sgn = connectedWallet;
+      await onConn();
+      closeModal('createWalletModal');
+    } catch(e) {
+      showImportMsg('info', `Imported! Address: ${wallet.address}`);
+      walletAddr = wallet.address;
+      const btn = document.getElementById('connectBtn');
+      if (btn) {
+        btn.textContent = wallet.address.slice(0,6) + '…' + wallet.address.slice(-4);
+        btn.classList.add('connected');
+      }
+      closeModal('createWalletModal');
+    }
+
+  } catch(e) {
+    showImportMsg('error', 'Invalid seed phrase or private key: ' + e.message);
+  }
 }
 
 </script>
