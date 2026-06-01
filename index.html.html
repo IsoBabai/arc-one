@@ -868,6 +868,160 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 .ai-cancel-btn{padding:9px;border-radius:8px;background:white;color:var(--steel);border:1px solid var(--border);font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;font-family:var(--font);cursor:pointer;transition:all .2s}
 .ai-cancel-btn:hover{border-color:var(--ruby);color:var(--ruby)}
 
+
+/* ════════════════════════════════
+   CREATE WALLET
+════════════════════════════════ */
+.btn-create-wallet {
+  width: 100%; max-width: 240px;
+  padding: 12px;
+  background: transparent;
+  color: var(--sky);
+  border: 1.5px solid var(--sky);
+  border-radius: 9px;
+  font-size: 12px; font-family: var(--font); font-weight: 700;
+  letter-spacing: .8px; text-transform: uppercase;
+  cursor: pointer; transition: all .25s;
+  margin-top: 2px;
+}
+.btn-create-wallet:hover {
+  background: rgba(14,165,233,.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(14,165,233,.2);
+}
+
+/* Create wallet modal steps */
+.cw-step { display: none; }
+.cw-step.active { display: block; animation: paneIn .3s ease both; }
+
+.cw-step-header {
+  text-align: center; padding: 8px 0 20px;
+}
+.cw-step-num {
+  font-size: 10px; font-family: var(--font-mono); color: var(--sky);
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;
+}
+.cw-step-title {
+  font-family: var(--font-serif); font-size: 22px; font-weight: 300;
+  color: var(--ink); margin-bottom: 6px;
+}
+.cw-step-sub { font-size: 13px; color: var(--steel); line-height: 1.6; }
+
+/* Address display */
+.cw-addr-box {
+  background: var(--fog); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 14px 16px; margin: 16px 0;
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink);
+  word-break: break-all; line-height: 1.6; position: relative;
+}
+.cw-addr-label {
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--mist); margin-bottom: 6px; font-family: var(--font-mono);
+}
+.cw-copy-btn {
+  position: absolute; top: 10px; right: 10px;
+  background: white; border: 1px solid var(--border);
+  border-radius: 5px; padding: 3px 9px; font-size: 10px; font-weight: 600;
+  color: var(--steel); cursor: pointer; transition: all .2s; font-family: var(--font);
+}
+.cw-copy-btn:hover { border-color: var(--sky); color: var(--sky); }
+
+/* Private key / seed display */
+.cw-secret-box {
+  background: #fff9f0; border: 1.5px solid #fed7aa;
+  border-radius: 10px; padding: 14px 16px; margin: 16px 0;
+  font-family: var(--font-mono); font-size: 11px; color: #92400e;
+  word-break: break-all; line-height: 1.7; position: relative;
+}
+.cw-secret-hidden {
+  filter: blur(6px); user-select: none; pointer-events: none;
+  transition: filter .3s;
+}
+.cw-reveal-btn {
+  display: block; width: 100%; margin-top: 12px;
+  padding: 9px; background: #fff7ed; border: 1px solid #fed7aa;
+  border-radius: 7px; font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  color: #b45309; cursor: pointer; font-family: var(--font); transition: all .2s;
+  text-transform: uppercase;
+}
+.cw-reveal-btn:hover { background: #ffedd5; }
+
+/* Warning banner */
+.cw-warning {
+  background: #fef2f2; border: 1px solid #fecaca;
+  border-radius: 10px; padding: 12px 14px; margin: 12px 0;
+  font-size: 12px; color: #991b1b; line-height: 1.6;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.cw-warning-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* Mnemonic phrase grid */
+.cw-phrase-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 14px 0;
+}
+.cw-phrase-word {
+  background: var(--fog); border: 1px solid var(--border);
+  border-radius: 7px; padding: 7px 10px; font-size: 12px;
+  font-family: var(--font-mono); color: var(--ink);
+  display: flex; gap: 6px; align-items: center;
+}
+.cw-phrase-idx { font-size: 10px; color: var(--mist); min-width: 16px; }
+
+/* Import wallet section */
+.cw-import-input {
+  width: 100%; padding: 11px 13px; border: 1px solid var(--border2);
+  border-radius: 9px; font-size: 12px; font-family: var(--font-mono);
+  color: var(--ink); background: var(--fog); outline: none;
+  transition: border-color .2s; resize: vertical; min-height: 80px;
+}
+.cw-import-input:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.08); }
+
+/* Step nav buttons */
+.cw-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.cw-btn-primary {
+  padding: 12px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--sky), var(--ink2));
+  color: white; border: none; font-size: 12px; font-weight: 700;
+  letter-spacing: .6px; text-transform: uppercase; font-family: var(--font);
+  cursor: pointer; transition: all .2s;
+}
+.cw-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(14,165,233,.3); }
+.cw-btn-secondary {
+  padding: 12px; border-radius: 9px; background: white;
+  color: var(--steel); border: 1px solid var(--border);
+  font-size: 12px; font-weight: 700; letter-spacing: .6px;
+  text-transform: uppercase; font-family: var(--font); cursor: pointer; transition: all .2s;
+}
+.cw-btn-secondary:hover { border-color: var(--sky); color: var(--sky); }
+.cw-btn-full { grid-column: 1 / -1; }
+
+/* Confirm checkbox */
+.cw-checkbox-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px; background: var(--fog); border-radius: 9px;
+  border: 1px solid var(--border); margin: 12px 0; cursor: pointer;
+}
+.cw-checkbox-row input { margin-top: 2px; accent-color: var(--sky); cursor: pointer; }
+.cw-checkbox-row span { font-size: 12px; color: var(--ink); line-height: 1.55; }
+
+/* Verify word inputs */
+.cw-verify-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+.cw-verify-item label { font-size: 10px; color: var(--mist); font-family: var(--font-mono); letter-spacing: .5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.cw-verify-item input { width: 100%; padding: 9px 11px; border: 1px solid var(--border2); border-radius: 7px; font-size: 13px; font-family: var(--font-mono); color: var(--ink); background: var(--fog); outline: none; transition: all .2s; }
+.cw-verify-item input:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(14,165,233,.08); }
+.cw-verify-item input.correct { border-color: #10b981; background: #f0fdf4; }
+.cw-verify-item input.wrong { border-color: #ef4444; background: #fef2f2; }
+
+/* Success state */
+.cw-success {
+  text-align: center; padding: 20px 0;
+}
+.cw-success-icon {
+  font-size: 48px; margin-bottom: 16px;
+  animation: successPop .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes successPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
 </style>
 </head>
 <body>
@@ -975,6 +1129,12 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           <div class="wc-title">Connect your wallet</div>
           <p class="wc-sub">Link MetaMask to Arc One. Send USDC on Arc Network. Sub-second finality.</p>
           <button class="btn-connect-main" onclick="openConnect()">Connect with MetaMask</button>
+          <div style="display:flex;align-items:center;gap:10px;margin:14px 0 0;width:100%;max-width:240px">
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+            <span style="font-size:10px;color:var(--mist);font-family:var(--font-mono);letter-spacing:.5px">or</span>
+            <div style="flex:1;height:1px;background:var(--border)"></div>
+          </div>
+          <button class="btn-create-wallet" onclick="openCreateWallet()">+ Create New Wallet</button>
           <div class="wc-note">// arc one · arc network · chain 5042002</div>
           <div id="httpHint" style="display:none;margin-top:16px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px 16px;text-align:left;max-width:280px">
             <div style="font-size:11px;font-weight:700;color:#0369a1;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">Serve over HTTP first</div>
@@ -1485,6 +1645,161 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
     </div>
   </div>
 </footer>
+
+
+<!-- ══ CREATE WALLET MODAL ══ -->
+<div class="modal-bg" id="createWalletModal">
+  <div class="modal-box" style="max-width:460px">
+    <button class="modal-close" onclick="closeModal('createWalletModal')" id="cwCloseBtn">✕</button>
+
+    <!-- STEP 0: Choose action -->
+    <div class="cw-step active" id="cw-step-0">
+      <div class="cw-step-header">
+        <div class="cw-step-num">// Arc One Wallet</div>
+        <div class="cw-step-title">Get started</div>
+        <p class="cw-step-sub">Create a brand new wallet or import an existing one.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+        <button class="cw-btn-primary cw-btn-full" style="padding:16px" onclick="startCreateWallet()">
+          ✦ Create New Wallet
+        </button>
+        <button class="cw-btn-secondary cw-btn-full" style="padding:16px" onclick="showCWStep('import')">
+          ↓ Import Existing Wallet
+        </button>
+      </div>
+      <p style="font-size:11px;color:var(--mist);text-align:center;margin-top:16px;font-family:var(--font-mono)">// non-custodial · keys stored locally · arc testnet</p>
+    </div>
+
+    <!-- STEP 1: Generating -->
+    <div class="cw-step" id="cw-step-1">
+      <div class="cw-step-header">
+        <div class="cw-step-num">Step 1 of 4</div>
+        <div class="cw-step-title">Your new wallet</div>
+        <p class="cw-step-sub">A unique wallet has been generated for you. This address is yours on Arc Network.</p>
+      </div>
+      <div class="cw-warning">
+        <span class="cw-warning-icon">⚠️</span>
+        <div>Never share your private key or seed phrase with anyone — not even Arc One support. Anyone who has it controls your funds.</div>
+      </div>
+      <div class="cw-addr-label">Your Wallet Address</div>
+      <div class="cw-addr-box" id="cwAddress">
+        —
+        <button class="cw-copy-btn" onclick="copyText('cwAddress','address')">Copy</button>
+      </div>
+      <div class="cw-btn-row">
+        <button class="cw-btn-secondary" onclick="showCWStep(0)">← Back</button>
+        <button class="cw-btn-primary" onclick="showCWStep(2)">View Recovery Phrase →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Recovery phrase -->
+    <div class="cw-step" id="cw-step-2">
+      <div class="cw-step-header">
+        <div class="cw-step-num">Step 2 of 4</div>
+        <div class="cw-step-title">Recovery phrase</div>
+        <p class="cw-step-sub">Write these 12 words on paper. They are the only way to recover your wallet.</p>
+      </div>
+      <div class="cw-warning">
+        <span class="cw-warning-icon">🔒</span>
+        <div>Write this down offline. Do <strong>not</strong> screenshot, copy to clipboard, or store digitally.</div>
+      </div>
+      <div class="cw-secret-box">
+        <div class="cw-phrase-grid cw-secret-hidden" id="cwPhraseGrid"></div>
+        <button class="cw-reveal-btn" id="cwRevealBtn" onclick="revealPhrase()">👁 Tap to Reveal Phrase</button>
+      </div>
+      <div class="cw-checkbox-row" onclick="toggleCheck('cwBackedUp')">
+        <input type="checkbox" id="cwBackedUp">
+        <span>I have written down my 12-word recovery phrase in a safe place.</span>
+      </div>
+      <div class="cw-btn-row">
+        <button class="cw-btn-secondary" onclick="showCWStep(1)">← Back</button>
+        <button class="cw-btn-primary" id="cwStep2Next" onclick="showCWStep(3)" disabled style="opacity:.4;cursor:not-allowed">Verify Backup →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Verify backup -->
+    <div class="cw-step" id="cw-step-3">
+      <div class="cw-step-header">
+        <div class="cw-step-num">Step 3 of 4</div>
+        <div class="cw-step-title">Verify your backup</div>
+        <p class="cw-step-sub">Enter the correct words from your recovery phrase to confirm you've saved it.</p>
+      </div>
+      <div class="cw-verify-grid" id="cwVerifyGrid"></div>
+      <div class="cw-btn-row">
+        <button class="cw-btn-secondary" onclick="showCWStep(2)">← Back</button>
+        <button class="cw-btn-primary" id="cwStep3Next" onclick="showCWStep(4)" disabled style="opacity:.4;cursor:not-allowed">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Private key + finish -->
+    <div class="cw-step" id="cw-step-4">
+      <div class="cw-step-header">
+        <div class="cw-step-num">Step 4 of 4</div>
+        <div class="cw-step-title">Save your private key</div>
+        <p class="cw-step-sub">Your private key lets you import this wallet into MetaMask and any EVM wallet.</p>
+      </div>
+      <div class="cw-addr-label">Private Key</div>
+      <div class="cw-secret-box">
+        <div class="cw-secret-hidden" id="cwPrivKey">—</div>
+        <button class="cw-reveal-btn" id="cwRevealPK" onclick="revealPK()">👁 Tap to Reveal Private Key</button>
+      </div>
+      <div style="background:var(--fog);border:1px solid var(--border);border-radius:10px;padding:14px;margin:12px 0">
+        <div style="font-size:11px;font-weight:700;color:var(--ink);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">How to import into MetaMask:</div>
+        <div style="font-size:12px;color:var(--steel);line-height:1.7">
+          1. Open MetaMask → click account icon<br>
+          2. Select <strong>Import account</strong><br>
+          3. Paste your private key → click Import<br>
+          4. Switch network to Arc Testnet
+        </div>
+      </div>
+      <div class="cw-checkbox-row" onclick="toggleCheck('cwSavedPK')">
+        <input type="checkbox" id="cwSavedPK">
+        <span>I have saved my private key securely. I understand losing it means losing access to my wallet forever.</span>
+      </div>
+      <div class="cw-btn-row">
+        <button class="cw-btn-secondary" onclick="showCWStep(3)">← Back</button>
+        <button class="cw-btn-primary" id="cwFinishBtn" onclick="finishCreateWallet()" disabled style="opacity:.4;cursor:not-allowed">Use This Wallet →</button>
+      </div>
+    </div>
+
+    <!-- IMPORT STEP -->
+    <div class="cw-step" id="cw-step-import">
+      <div class="cw-step-header">
+        <div class="cw-step-num">// Import Wallet</div>
+        <div class="cw-step-title">Import wallet</div>
+        <p class="cw-step-sub">Enter your 12-word seed phrase or private key to restore access.</p>
+      </div>
+      <div class="cw-warning">
+        <span class="cw-warning-icon">🔒</span>
+        <div>Your keys are never sent anywhere. All processing happens locally in your browser.</div>
+      </div>
+      <div style="margin-bottom:14px">
+        <label class="cw-addr-label">Seed Phrase or Private Key</label>
+        <textarea class="cw-import-input" id="cwImportInput" placeholder="Enter 12-word seed phrase separated by spaces, or paste your 0x private key..."></textarea>
+      </div>
+      <div class="tx-msg" id="cwImportMsg" style="display:none"></div>
+      <div class="cw-btn-row">
+        <button class="cw-btn-secondary" onclick="showCWStep(0)">← Back</button>
+        <button class="cw-btn-primary" onclick="importWallet()">Import Wallet →</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS STEP -->
+    <div class="cw-step" id="cw-step-success">
+      <div class="cw-success">
+        <div class="cw-success-icon">🎉</div>
+        <div class="cw-step-title">Wallet ready!</div>
+        <p class="cw-step-sub" style="margin:10px auto;max-width:280px">Your wallet is set up. Add it to MetaMask using your private key, then connect to Arc One.</p>
+        <div class="cw-addr-box" id="cwSuccessAddr" style="text-align:left;margin:16px 0;font-size:11px"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+          <button class="cw-btn-primary cw-btn-full" onclick="closeModal('createWalletModal');openConnect()">Connect with MetaMask →</button>
+          <button class="cw-btn-secondary cw-btn-full" onclick="closeModal('createWalletModal')">Close</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- CONNECT MODAL -->
 <div class="modal-bg" id="connectModal">
