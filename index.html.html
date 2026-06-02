@@ -39,8 +39,8 @@ nav{position:fixed;top:36px;left:0;right:0;z-index:300;height:60px;
   background:rgba(248,251,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;justify-content:space-between;transition:box-shadow .3s}
 .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
-.nav-logo-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--sky),var(--ink2));border-radius:8px;display:flex;align-items:center;justify-content:center}
-.nav-logo-mark svg{width:16px;height:16px;fill:white}
+.nav-logo-mark{width:36px;height:36px;background:#0ea5e9;border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(14,165,233,.45)}
+.nav-logo-mark svg{width:22px;height:22px}
 .nav-logo-text{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--ink)}
 .nav-logo-text span{color:var(--sky)}
 .nav-links{display:flex;gap:24px}
@@ -364,12 +364,12 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 .footer-inner{max-width:1120px;margin:0 auto;padding:48px 40px 32px;position:relative}
 .footer-top{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:32px;margin-bottom:40px}
 .footer-logo-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.fl-mark{width:26px;height:26px;background:rgba(14,165,233,.15);border-radius:6px;display:flex;align-items:center;justify-content:center}
-.fl-mark svg{width:14px;height:14px;fill:var(--sky2)}
+.fl-mark{width:32px;height:32px;background:#0ea5e9;border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(14,165,233,.3)}
+.fl-mark svg{width:20px;height:20px}
 .fl-name{font-size:16px;font-weight:700;color:white}
 .fl-name span{color:var(--sky2)}
 .footer-brand p{font-size:12px;color:#7dd3fc;line-height:1.7}
-.footer-col-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:12px;font-family:var(--font-mono)}
+.footer-col-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#c9a84c;margin-bottom:12px;font-family:var(--font-mono)}
 .footer-links-list{list-style:none;display:flex;flex-direction:column;gap:8px}
 .footer-links-list a{font-size:12px;color:rgba(255,255,255,.45);text-decoration:none;cursor:pointer;transition:color .2s}
 .footer-links-list a:hover{color:var(--sky2)}
@@ -1062,9 +1062,9 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 <nav id="mainNav">
   <div class="nav-logo" onclick="nav('home')">
     <div class="nav-logo-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.5" fill="none" opacity="0.4"/>
-  <path d="M8 16 L12 7 L16 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M9.5 13 H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M6 18 L12 5 L18 18" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="9" y1="14.5" x2="15" y2="14.5" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M4 20.5 A10 10 0 0 1 20 20.5" stroke="rgba(255,255,255,.3)" stroke-width="1.8" stroke-linecap="round"/>
 </svg></div>
     <span class="nav-logo-text">Arc<span>One</span></span>
   </div>
@@ -1608,9 +1608,9 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <div>
         <div class="footer-logo-row">
           <div class="fl-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.5" fill="none" opacity="0.4"/>
-  <path d="M8 16 L12 7 L16 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M9.5 13 H14.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M6 18 L12 5 L18 18" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="9" y1="14.5" x2="15" y2="14.5" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M4 20.5 A10 10 0 0 1 20 20.5" stroke="rgba(255,255,255,.3)" stroke-width="1.8" stroke-linecap="round"/>
 </svg></div>
           <div class="fl-name">Arc<span>One</span></div>
         </div>
