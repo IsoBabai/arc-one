@@ -39,7 +39,7 @@ nav{position:fixed;top:36px;left:0;right:0;z-index:300;height:60px;
   background:rgba(248,251,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 40px;justify-content:space-between;transition:box-shadow .3s}
 .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
-.nav-logo-mark{width:36px;height:36px;background:#0ea5e9;border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(14,165,233,.45)}
+.nav-logo-mark{width:36px;height:36px;background:linear-gradient(145deg,#1e6ab4 0%,#071220 100%);border-radius:11px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 14px rgba(14,165,233,.4),inset 0 1px 0 rgba(255,255,255,.12)}
 .nav-logo-mark svg{width:22px;height:22px}
 .nav-logo-text{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--ink)}
 .nav-logo-text span{color:var(--sky)}
@@ -364,7 +364,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 .footer-inner{max-width:1120px;margin:0 auto;padding:48px 40px 32px;position:relative}
 .footer-top{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:32px;margin-bottom:40px}
 .footer-logo-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-.fl-mark{width:32px;height:32px;background:#0ea5e9;border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(14,165,233,.3)}
+.fl-mark{width:32px;height:32px;background:linear-gradient(145deg,#1e6ab4,#071220);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(14,165,233,.25);border:1px solid rgba(14,165,233,.2)}
 .fl-mark svg{width:20px;height:20px}
 .fl-name{font-size:16px;font-weight:700;color:white}
 .fl-name span{color:var(--sky2)}
@@ -375,8 +375,8 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 .footer-links-list a:hover{color:var(--sky2)}
 .footer-divider{height:1px;background:rgba(255,255,255,.07);margin-bottom:22px}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.footer-copy{font-size:11px;color:rgba(255,255,255,.22);font-family:var(--font-mono)}
-.footer-tagline{font-size:11px;color:rgba(255,255,255,.22);font-style:italic;font-family:var(--font-serif)}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.65);font-family:var(--font-mono)}
+.footer-tagline{font-size:11px;color:rgba(255,255,255,.65);font-style:italic;font-family:var(--font-serif)}
 
 /* PARTICLES */
 .spark{position:fixed;pointer-events:none;border-radius:50%;opacity:0;animation:sparkle 7s ease-in-out infinite;z-index:0}
@@ -1022,6 +1022,99 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 }
 @keyframes successPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+
+/* ════════════════════════════════
+   AI HERO SHOWCASE
+════════════════════════════════ */
+
+/* AI prompt bar on hero */
+.ai-hero-bar{
+  background:rgba(255,255,255,.92);
+  border:1.5px solid var(--sky);
+  border-radius:14px;
+  padding:0;
+  margin-bottom:28px;
+  overflow:hidden;
+  box-shadow:0 4px 24px rgba(14,165,233,.15),0 0 0 4px rgba(14,165,233,.06);
+  animation:heroFadeUp .7s .35s both;
+  position:relative;
+}
+.ai-hero-bar::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(14,165,233,.04),transparent);
+  pointer-events:none;
+}
+.ai-hero-label{
+  display:flex;align-items:center;gap:7px;
+  padding:10px 16px 0;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--sky);font-family:var(--font-mono);
+}
+.ai-hero-label-dot{
+  width:7px;height:7px;background:var(--sky);border-radius:50%;
+  animation:pulse 2s infinite;
+}
+.ai-hero-prompt-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px 12px;
+}
+.ai-hero-input{
+  flex:1;border:none;background:none;outline:none;
+  font-size:14px;font-family:var(--font);color:var(--ink);
+  padding:4px 0;
+}
+.ai-hero-input::placeholder{color:var(--mist)}
+.ai-hero-send{
+  width:34px;height:34px;border-radius:9px;border:none;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sky),var(--ink2));
+  color:white;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;box-shadow:0 2px 8px rgba(14,165,233,.3);
+}
+.ai-hero-send:hover{transform:scale(1.08);box-shadow:0 4px 14px rgba(14,165,233,.4)}
+.ai-hero-examples{
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding:0 12px 12px;
+  border-top:1px solid rgba(14,165,233,.1);
+  padding-top:9px;
+}
+.ai-ex-chip{
+  padding:4px 11px;border-radius:100px;
+  background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.18);
+  font-size:11px;color:var(--sky);cursor:pointer;
+  transition:all .18s;font-family:var(--font);font-weight:500;
+  white-space:nowrap;
+}
+.ai-ex-chip:hover{background:rgba(14,165,233,.15);border-color:var(--sky)}
+
+/* AI feature pills row */
+.ai-feature-pills{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:28px;
+  animation:heroFadeUp .7s .28s both;
+}
+.ai-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 13px;border-radius:100px;
+  background:rgba(14,165,233,.07);border:1px solid rgba(14,165,233,.18);
+  font-size:12px;font-weight:600;color:var(--ink2);
+  letter-spacing:-.1px;
+}
+.ai-pill-icon{font-size:13px}
+
+/* Headline sub label */
+.ai-hero-sublabel{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--sky);margin-bottom:10px;font-family:var(--font-mono);
+  animation:heroFadeUp .5s .05s both;
+}
+.ai-hero-sublabel-icon{
+  width:22px;height:22px;background:linear-gradient(135deg,var(--sky),var(--ink2));
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+}
+
 </style>
 </head>
 <body>
@@ -1062,9 +1155,16 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
 <nav id="mainNav">
   <div class="nav-logo" onclick="nav('home')">
     <div class="nav-logo-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M6 18 L12 5 L18 18" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="9" y1="14.5" x2="15" y2="14.5" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round"/>
-  <path d="M4 20.5 A10 10 0 0 1 20 20.5" stroke="rgba(255,255,255,.3)" stroke-width="1.8" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="og1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e6ab4"/>
+      <stop offset="100%" stop-color="#071220"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="12" cy="12" rx="9.5" ry="3.8" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2.5 2" fill="none" opacity="0.6"/>
+  <path d="M5.5 18.5 L12 5.5 L18.5 18.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <line x1="8.5" y1="15" x2="15.5" y2="15" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="12" cy="5.5" r="1.8" fill="#38bdf8"/>
 </svg></div>
     <span class="nav-logo-text">Arc<span>One</span></span>
   </div>
@@ -1100,16 +1200,51 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           <rect width="100%" height="100%" fill="url(#grid)"/>
         </svg>
       </div>
-      <div class="hero-badge"><span class="hero-badge-dot"></span>Arc One · Arc Testnet</div>
+      <div class="hero-badge"><span class="hero-badge-dot"></span>Arc One · Arc Testnet · AI-Powered</div>
+
+      <!-- Headline -->
       <h1 class="hero-h1">
-          <span style="display:block;overflow:hidden"><span style="display:block;animation:heroFadeUp .6s .1s both">The wallet</span></span>
-          <span style="display:block;overflow:hidden"><em style="display:block;animation:heroFadeUp .6s .25s both">built for Arc.</em></span>
-        </h1>
-      <p class="hero-p">Arc One is your gateway to Arc Network — Circle's stablecoin-native L1. USDC-gassed. Sub-second finality. AI-powered.</p>
+        <span style="display:block;overflow:hidden"><span style="display:block;animation:heroFadeUp .6s .1s both">Just type.</span></span>
+        <span style="display:block;overflow:hidden"><em style="display:block;animation:heroFadeUp .6s .22s both">Arc One does the rest.</em></span>
+      </h1>
+
+      <!-- AI feature pills -->
+      <div class="ai-feature-pills">
+        <div class="ai-pill"><span class="ai-pill-icon">⬆</span>Send USDC</div>
+        <div class="ai-pill"><span class="ai-pill-icon">⛽</span>Estimate gas</div>
+        <div class="ai-pill"><span class="ai-pill-icon">💰</span>Check balance</div>
+        <div class="ai-pill"><span class="ai-pill-icon">🔍</span>View history</div>
+        <div class="ai-pill"><span class="ai-pill-icon">🚰</span>Get test USDC</div>
+      </div>
+
+      <!-- AI Prompt Bar -->
+      <div class="ai-hero-bar">
+        <div class="ai-hero-label">
+          <span class="ai-hero-label-dot"></span>
+          AI Assistant — try a command
+        </div>
+        <div class="ai-hero-prompt-row">
+          <input class="ai-hero-input" id="heroAiInput"
+            placeholder="Send 1 USDC to 0xABC… · Check my balance · Open faucet"
+            onkeydown="if(event.key==='Enter')heroAiGo()">
+          <button class="ai-hero-send" onclick="heroAiGo()" title="Send">↑</button>
+        </div>
+        <div class="ai-hero-examples">
+          <span class="ai-ex-chip" onclick="heroAiSet(this)">"Send 2 USDC to 0x…"</span>
+          <span class="ai-ex-chip" onclick="heroAiSet(this)">"Check my balance"</span>
+          <span class="ai-ex-chip" onclick="heroAiSet(this)">"Estimate gas"</span>
+          <span class="ai-ex-chip" onclick="heroAiSet(this)">"Open faucet"</span>
+          <span class="ai-ex-chip" onclick="heroAiSet(this)">"Show my transactions"</span>
+        </div>
+      </div>
+
+      <!-- CTA row -->
       <div class="hero-cta-row">
         <button class="btn-sky" onclick="openConnect()">Connect Wallet</button>
-        <button class="btn-ghost" onclick="nav('faq')">Learn More</button>
+        <button class="btn-ghost" onclick="nav('ai')">See AI Demo</button>
       </div>
+
+      <!-- Stats -->
       <div class="hero-arc-info">
         <div class="hai-item"><div class="hai-val">5042002</div><div class="hai-lbl">Chain ID</div></div>
         <div class="hai-item"><div class="hai-val">USDC</div><div class="hai-lbl">Gas Token</div></div>
@@ -1135,7 +1270,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
             <div style="flex:1;height:1px;background:var(--border)"></div>
           </div>
           <button class="btn-create-wallet" onclick="openCreateWallet()">+ Create New Wallet</button>
-          <div class="wc-note">// arc one · arc network · chain 5042002</div>
+          <div class="wc-note">arc one · arc network · chain 5042002</div>
           <div id="httpHint" style="display:none;margin-top:16px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px 16px;text-align:left;max-width:280px">
             <div style="font-size:11px;font-weight:700;color:#0369a1;margin-bottom:8px;letter-spacing:.5px;text-transform:uppercase">Serve over HTTP first</div>
             <div style="font-size:11px;font-family:monospace;background:#e0f2fe;padding:5px 8px;border-radius:5px;margin-bottom:6px;color:#0c4a6e">python3 -m http.server 8080</div>
@@ -1228,7 +1363,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
             <div id="txHistEl"><div class="tx-empty">No transactions yet.</div></div>
           </div>
           <div class="w-pane" id="pane-faucet">
-            <p style="font-size:11px;color:var(--mist);margin-bottom:10px;font-family:var(--font-mono)">// Get free Arc Testnet USDC</p>
+            <p style="font-size:11px;color:var(--mist);margin-bottom:10px;font-family:var(--font-mono)">Get free Arc Testnet USDC</p>
             <div class="fc-links">
               <a class="fc-link" href="https://faucet.circle.com" target="_blank">Circle USDC Faucet (Official)<span class="fc-badge">Daily limit</span></a>
               <a class="fc-link" href="https://testnet.arcscan.app" target="_blank">Arc Explorer (arcscan.app) ↗<span class="fc-badge">Explorer</span></a>
@@ -1365,9 +1500,9 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <div class="pg-eyebrow">Testimonials</div>
       <h2 style="font-family:var(--font-serif);font-size:32px;font-weight:300;color:var(--ink);margin-bottom:0">Loved by the community.</h2>
       <div class="testi-grid">
-        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-q">"Arc One is the first wallet that doesn't feel like navigating a nuclear reactor. The scam detection alone saved me thousands."</p><div class="testi-author"><div class="testi-av">MK</div><div><div class="testi-name">Marcus K.</div><div class="testi-role">// DeFi Trader, 4 years</div></div></div></div>
-        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-q">"I just type what I want and Arc One explains everything before executing. Total game changer for crypto beginners."</p><div class="testi-author"><div class="testi-av">SL</div><div><div class="testi-name">Sophie L.</div><div class="testi-role">// Crypto beginner</div></div></div></div>
-        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-q">"Our DAO treasury runs through Arc One. Cross-chain payouts that took half a day now happen in minutes."</p><div class="testi-author"><div class="testi-av">RP</div><div><div class="testi-name">Raj P.</div><div class="testi-role">// DAO Operator</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-q">"Arc One is the first wallet that doesn't feel like navigating a nuclear reactor. The scam detection alone saved me thousands."</p><div class="testi-author"><div class="testi-av">MK</div><div><div class="testi-name">Marcus K.</div><div class="testi-role">DeFi Trader, 4 years</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-q">"I just type what I want and Arc One explains everything before executing. Total game changer for crypto beginners."</p><div class="testi-author"><div class="testi-av">SL</div><div><div class="testi-name">Sophie L.</div><div class="testi-role">Crypto beginner</div></div></div></div>
+        <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-q">"Our DAO treasury runs through Arc One. Cross-chain payouts that took half a day now happen in minutes."</p><div class="testi-author"><div class="testi-av">RP</div><div><div class="testi-name">Raj P.</div><div class="testi-role">DAO Operator</div></div></div></div>
       </div>
     </div>
   </div>
@@ -1391,7 +1526,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           <div class="ai-chip" onclick="swDemo('analyze',this)">Analyze</div>
         </div>
         <div class="ai-extras">
-          <div class="ai-extras-lbl">// Arc One handles automatically</div>
+          <div class="ai-extras-lbl">Arc One handles automatically</div>
           <div class="ai-feat-row">→ Best route across Arc protocols</div>
           <div class="ai-feat-row">→ USDC gas fee estimation</div>
           <div class="ai-feat-row">→ MEV protection and slippage</div>
@@ -1409,22 +1544,22 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
             <button class="dw-tab" onclick="swDemo('analyze',this)">Analyze</button>
           </div>
           <div class="dw-pane active" id="dp-bridge">
-            <div class="chat-row user"><div class="chat-bub user">Bridge my USDC to Arc Network</div><div class="chat-who">// You</div></div>
-            <div class="chat-row ai"><div class="chat-bub ai">🔍 Analyzing routes…<br><br><strong>Best: Arc Bridge (Circle CCTP)</strong><br>• Fee: ~$0.10 USDC · &lt;1 sec<br>• No slippage — native USDC<br>• Instant finality on Arc<br><br>Simulated ✓ · No risks. Confirm?</div><div class="chat-who">// Arc One</div></div>
-            <div class="chat-row user"><div class="chat-bub user">Yes, go ahead</div><div class="chat-who">// You</div></div>
-            <div class="chat-row ai"><div class="chat-bub ai">✅ <strong>Bridge complete in &lt;1 sec.</strong> USDC now on Arc Network.</div><div class="chat-who">// Arc One</div></div>
+            <div class="chat-row user"><div class="chat-bub user">Bridge my USDC to Arc Network</div><div class="chat-who">You</div></div>
+            <div class="chat-row ai"><div class="chat-bub ai">🔍 Analyzing routes…<br><br><strong>Best: Arc Bridge (Circle CCTP)</strong><br>• Fee: ~$0.10 USDC · &lt;1 sec<br>• No slippage — native USDC<br>• Instant finality on Arc<br><br>Simulated ✓ · No risks. Confirm?</div><div class="chat-who">Arc One</div></div>
+            <div class="chat-row user"><div class="chat-bub user">Yes, go ahead</div><div class="chat-who">You</div></div>
+            <div class="chat-row ai"><div class="chat-bub ai">✅ <strong>Bridge complete in &lt;1 sec.</strong> USDC now on Arc Network.</div><div class="chat-who">Arc One</div></div>
           </div>
           <div class="dw-pane" id="dp-stake">
-            <div class="chat-row user"><div class="chat-bub user">Stake my USDC on Arc safely</div><div class="chat-who">// You</div></div>
-            <div class="chat-row ai"><div class="chat-bub ai">🔎 Scanning Arc protocols…<br><br><strong>Recommended: Arc Native Yield</strong><br>• APY: 4.8% · Audited ✓<br>• USDC-denominated returns<br>• Risk: Very Low<br><br>Also safe: Aave v3 (5.2%)<br><br>Shall I stake on Arc native?</div><div class="chat-who">// Arc One</div></div>
+            <div class="chat-row user"><div class="chat-bub user">Stake my USDC on Arc safely</div><div class="chat-who">You</div></div>
+            <div class="chat-row ai"><div class="chat-bub ai">🔎 Scanning Arc protocols…<br><br><strong>Recommended: Arc Native Yield</strong><br>• APY: 4.8% · Audited ✓<br>• USDC-denominated returns<br>• Risk: Very Low<br><br>Also safe: Aave v3 (5.2%)<br><br>Shall I stake on Arc native?</div><div class="chat-who">Arc One</div></div>
           </div>
           <div class="dw-pane" id="dp-swap">
-            <div class="chat-row user"><div class="chat-bub user">Swap USDC into top AI tokens</div><div class="chat-who">// You</div></div>
-            <div class="chat-row ai"><div class="chat-bub ai">📊 AI sector analysis…<br><br><strong>Suggested allocation:</strong><br>• 40% FET — Strong fundamentals<br>• 35% RNDR — High growth<br>• 25% TAO — Higher risk/reward<br><br>⚠️ Volatile sector. Want a stop-loss?</div><div class="chat-who">// Arc One</div></div>
+            <div class="chat-row user"><div class="chat-bub user">Swap USDC into top AI tokens</div><div class="chat-who">You</div></div>
+            <div class="chat-row ai"><div class="chat-bub ai">📊 AI sector analysis…<br><br><strong>Suggested allocation:</strong><br>• 40% FET — Strong fundamentals<br>• 35% RNDR — High growth<br>• 25% TAO — Higher risk/reward<br><br>⚠️ Volatile sector. Want a stop-loss?</div><div class="chat-who">Arc One</div></div>
           </div>
           <div class="dw-pane" id="dp-analyze">
-            <div class="chat-row user"><div class="chat-bub user">Analyze my Arc portfolio risk</div><div class="chat-who">// You</div></div>
-            <div class="chat-row ai"><div class="chat-bub ai">🧮 Analysis complete.<br><br><strong>Health: 78/100</strong><br>• ETH concentration: High ⚠️<br>• USDC yield: Not deployed ⚠️<br>• Arc protocols: 0% allocated<br><br><strong>Actions:</strong><br>• Deploy 15% USDC to Arc yield<br>• Trim 10% ETH → USDC buffer</div><div class="chat-who">// Arc One</div></div>
+            <div class="chat-row user"><div class="chat-bub user">Analyze my Arc portfolio risk</div><div class="chat-who">You</div></div>
+            <div class="chat-row ai"><div class="chat-bub ai">🧮 Analysis complete.<br><br><strong>Health: 78/100</strong><br>• ETH concentration: High ⚠️<br>• USDC yield: Not deployed ⚠️<br>• Arc protocols: 0% allocated<br><br><strong>Actions:</strong><br>• Deploy 15% USDC to Arc yield<br>• Trim 10% ETH → USDC buffer</div><div class="chat-who">Arc One</div></div>
           </div>
         </div>
       </div>
@@ -1440,7 +1575,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <div class="pg-divider"></div>
     <div class="faq-layout">
       <div class="faq-nav">
-        <div class="faq-nav-lbl">// Sections</div>
+        <div class="faq-nav-lbl">Sections</div>
         <div class="faq-nav-item active" onclick="scrollFaq('faq-start',this)">Getting Started</div>
         <div class="faq-nav-item" onclick="scrollFaq('faq-arc',this)">Arc Network</div>
         <div class="faq-nav-item" onclick="scrollFaq('faq-wallet',this)">Wallet & Connection</div>
@@ -1608,9 +1743,10 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <div>
         <div class="footer-logo-row">
           <div class="fl-mark"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M6 18 L12 5 L18 18" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-  <line x1="9" y1="14.5" x2="15" y2="14.5" stroke="rgba(255,255,255,.75)" stroke-width="2" stroke-linecap="round"/>
-  <path d="M4 20.5 A10 10 0 0 1 20 20.5" stroke="rgba(255,255,255,.3)" stroke-width="1.8" stroke-linecap="round"/>
+  <ellipse cx="12" cy="12" rx="9.5" ry="3.8" stroke="#38bdf8" stroke-width="1" stroke-dasharray="2.5 2" fill="none" opacity="0.6"/>
+  <path d="M5.5 18.5 L12 5.5 L18.5 18.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <line x1="8.5" y1="15" x2="15.5" y2="15" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
+  <circle cx="12" cy="5.5" r="1.8" fill="#38bdf8"/>
 </svg></div>
           <div class="fl-name">Arc<span>One</span></div>
         </div>
@@ -1655,7 +1791,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <!-- STEP 0: Choose action -->
     <div class="cw-step active" id="cw-step-0">
       <div class="cw-step-header">
-        <div class="cw-step-num">// Arc One Wallet</div>
+        <div class="cw-step-num">Arc One Wallet</div>
         <div class="cw-step-title">Get started</div>
         <p class="cw-step-sub">Create a brand new wallet or import an existing one.</p>
       </div>
@@ -1667,7 +1803,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           ↓ Import Existing Wallet
         </button>
       </div>
-      <p style="font-size:11px;color:var(--mist);text-align:center;margin-top:16px;font-family:var(--font-mono)">// non-custodial · keys stored locally · arc testnet</p>
+      <p style="font-size:11px;color:var(--mist);text-align:center;margin-top:16px;font-family:var(--font-mono)">non-custodial · keys stored locally · arc testnet</p>
     </div>
 
     <!-- STEP 1: Generating -->
@@ -1765,7 +1901,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <!-- IMPORT STEP -->
     <div class="cw-step" id="cw-step-import">
       <div class="cw-step-header">
-        <div class="cw-step-num">// Import Wallet</div>
+        <div class="cw-step-num">Import Wallet</div>
         <div class="cw-step-title">Import wallet</div>
         <p class="cw-step-sub">Enter your 12-word seed phrase or private key to restore access.</p>
       </div>
@@ -1806,23 +1942,23 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('connectModal')">✕</button>
     <div class="modal-title">Connect wallet</div>
-    <div class="modal-sub">// Arc One · Arc Testnet · Chain 5042002</div>
+    <div class="modal-sub">Arc One · Arc Testnet · Chain 5042002</div>
     <div id="wOpts">
       <button class="w-opt" onclick="doConnect()">
         <div class="wo-ico" style="background:#fff7ed"><img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" width="26" height="26" alt="MM"></div>
-        <div><div class="wo-name">MetaMask</div><div class="wo-desc">// browser extension</div></div><span class="wo-arr">›</span>
+        <div><div class="wo-name">MetaMask</div><div class="wo-desc">Browser extension</div></div><span class="wo-arr">›</span>
       </button>
       <button class="w-opt" onclick="doConnect()">
         <div class="wo-ico" style="background:#eff6ff"><img src="https://avatars.githubusercontent.com/u/18060234" width="26" height="26" style="border-radius:6px" alt="CB"></div>
-        <div><div class="wo-name">Coinbase Wallet</div><div class="wo-desc">// browser extension</div></div><span class="wo-arr">›</span>
+        <div><div class="wo-name">Coinbase Wallet</div><div class="wo-desc">Browser extension</div></div><span class="wo-arr">›</span>
       </button>
       <button class="w-opt" onclick="doConnect()">
         <div class="wo-ico" style="background:rgba(14,165,233,.1);font-size:19px">🔑</div>
-        <div><div class="wo-name">Other Wallet</div><div class="wo-desc">// any injected provider</div></div><span class="wo-arr">›</span>
+        <div><div class="wo-name">Other Wallet</div><div class="wo-desc">Any injected provider</div></div><span class="wo-arr">›</span>
       </button>
     </div>
     <div id="wStatus"><div id="wStatusIcon"></div><div id="wStatusText"></div></div>
-    <p style="font-size:10px;color:var(--mist);text-align:center;margin-top:16px;font-family:var(--font-mono)">// arc one · non-custodial · your keys always</p>
+    <p style="font-size:10px;color:var(--mist);text-align:center;margin-top:16px;font-family:var(--font-mono)">arc one · non-custodial · your keys always</p>
   </div>
 </div>
 
@@ -1831,7 +1967,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
   <div class="modal-box">
     <button class="modal-close" onclick="closeLegal()" style="position:sticky;float:right;top:0">✕</button>
     <div id="lp">
-      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--sky);margin-bottom:10px;font-family:var(--font-mono)">// Legal</div>
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--sky);margin-bottom:10px;font-family:var(--font-mono)">Legal</div>
       <div style="font-family:var(--font-serif);font-size:24px;font-weight:300;color:var(--ink);margin-bottom:3px">Privacy Policy</div>
       <p style="font-size:11px;color:var(--mist);margin-bottom:22px;font-family:var(--font-mono)">Last updated: January 1, 2026</p>
       <div class="legal-h">1. Information We Collect</div><p class="legal-p">Arc One is non-custodial. We never collect private keys, seed phrases, or funds. We read your public wallet address to display balances only.</p>
@@ -1841,7 +1977,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
       <div class="legal-h">5. Contact</div><p class="legal-p">privacy@arcone.io</p>
     </div>
     <div id="lt" style="display:none">
-      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--sky);margin-bottom:10px;font-family:var(--font-mono)">// Legal</div>
+      <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--sky);margin-bottom:10px;font-family:var(--font-mono)">Legal</div>
       <div style="font-family:var(--font-serif);font-size:24px;font-weight:300;color:var(--ink);margin-bottom:3px">Terms of Service</div>
       <p style="font-size:11px;color:var(--mist);margin-bottom:22px;font-family:var(--font-mono)">Last updated: January 1, 2026</p>
       <div class="legal-h">1. Acceptance</div><p class="legal-p">By using Arc One, you agree to these Terms.</p>
@@ -2834,6 +2970,36 @@ async function importWallet() {
   } catch(e) {
     showImportMsg('error', 'Invalid seed phrase or private key: ' + e.message);
   }
+}
+
+
+// ══ HERO AI BAR ══
+function heroAiSet(el){
+  const input = document.getElementById('heroAiInput');
+  // Strip quotes from chip text
+  input.value = el.textContent.replace(/[""]/g,'').trim();
+  input.focus();
+}
+
+function heroAiGo(){
+  const input = document.getElementById('heroAiInput');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  if(!walletAddr){
+    // Not connected — open connect modal then queue the message
+    openConnect();
+    return;
+  }
+  // Switch to send tab and inject into AI assistant
+  nav('home');
+  setSendMode('ai');
+  switchTab('send');
+  // Small delay to ensure AI pane is visible
+  setTimeout(()=>{
+    document.getElementById('aiInput').value = text;
+    sendAIMessage();
+  }, 200);
 }
 
 </script>
