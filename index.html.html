@@ -1115,8 +1115,427 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
   font-size:11px;
 }
 
+/* ════════════════════════════════
+   CROSS-CHAIN BRIDGE STYLES
+════════════════════════════════ */
+
+/* Bridge AI Card */
+.bridge-ai-card {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink2) 100%);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(14,165,233,.2);
+  position: relative;
+  overflow: hidden;
+}
+.bridge-ai-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(45deg, rgba(14,165,233,.025) 0, rgba(14,165,233,.025) 1px, transparent 1px, transparent 24px);
+  pointer-events: none;
+}
+.bridge-ai-card::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(14,165,233,.12), transparent 65%);
+  pointer-events: none;
+}
+.bridge-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+.bridge-ai-chat {
+  min-height: 120px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 4px;
+  position: relative;
+  z-index: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(14,165,233,.3) transparent;
+}
+.bridge-ai-chat .ai-msg-bot .ai-msg-bubble {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.1);
+  color: rgba(255,255,255,.85);
+}
+.bridge-ai-chat .ai-msg-bot .ai-msg-bubble em { color: var(--sky3); }
+.bridge-ai-chat .ai-input-row {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(14,165,233,.25);
+}
+.bridge-ai-card .ai-input-row {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(14,165,233,.25);
+  position: relative;
+  z-index: 1;
+}
+.bridge-ai-card .ai-input-row:focus-within {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(14,165,233,.15);
+}
+.bridge-ai-card .ai-input { color: rgba(255,255,255,.9); }
+.bridge-ai-card .ai-input::placeholder { color: rgba(255,255,255,.3); }
+.bridge-ai-card .ai-quick-cmds { position: relative; z-index: 1; }
+.bridge-ai-card .ai-quick {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(14,165,233,.25);
+  color: rgba(255,255,255,.6);
+}
+.bridge-ai-card .ai-quick:hover {
+  background: rgba(14,165,233,.2);
+  border-color: var(--sky);
+  color: var(--sky3);
+}
+
+/* Bridge Dashboard */
+.bridge-dashboard {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+/* Chain Select */
+.chain-select-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--fog);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+  user-select: none;
+}
+.chain-select-wrap:hover {
+  border-color: var(--sky);
+  background: rgba(14,165,233,.06);
+  box-shadow: 0 0 0 3px rgba(14,165,233,.08);
+}
+.chain-select-inner { display: flex; align-items: center; gap: 10px; }
+.chain-select-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.chain-select-sub { font-size: 10px; color: var(--mist); font-family: var(--font-mono); }
+.chain-select-arrow { color: var(--mist); font-size: 11px; }
+.chain-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, #627eea, #3c55c9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; color: white; flex-shrink: 0;
+}
+.chain-icon.arc-chain {
+  background: linear-gradient(135deg, var(--sky), var(--ink2));
+}
+.chain-icon.base { background: linear-gradient(135deg, #0052ff, #003cbf); }
+.chain-icon.arb { background: linear-gradient(135deg, #28a0f0, #1a6fa8); }
+.chain-icon.opt { background: linear-gradient(135deg, #ff0420, #c0021a); }
+.chain-icon.poly { background: linear-gradient(135deg, #8247e5, #5c32a8); }
+.chain-icon.sol { background: linear-gradient(135deg, #9945ff, #6931b3); }
+
+/* Bridge swap button */
+.bridge-swap-btn {
+  width: 36px; height: 36px;
+  background: white;
+  border: 1px solid var(--border2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all .25s;
+  color: var(--sky);
+  flex-shrink: 0;
+  margin-bottom: 2px;
+  box-shadow: 0 2px 8px rgba(14,165,233,.15);
+}
+.bridge-swap-btn:hover {
+  background: rgba(14,165,233,.08);
+  border-color: var(--sky);
+  transform: rotate(180deg);
+  box-shadow: 0 4px 16px rgba(14,165,233,.25);
+}
+
+/* Token select */
+.token-select-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--fog);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+}
+
+/* Amount pills */
+.bridge-amt-pill {
+  padding: 4px 10px;
+  background: rgba(14,165,233,.07);
+  border: 1px solid rgba(14,165,233,.18);
+  border-radius: 6px;
+  font-size: 10px; font-weight: 700; letter-spacing: .4px;
+  color: var(--sky); cursor: pointer;
+  font-family: var(--font-mono);
+  transition: all .18s;
+}
+.bridge-amt-pill:hover {
+  background: rgba(14,165,233,.18);
+  border-color: var(--sky);
+}
+
+/* Bridge route visualization */
+.bridge-route-viz {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(14,165,233,.04), rgba(30,58,95,.06));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+.route-chain-node { text-align: center; flex-shrink: 0; }
+.route-chain-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #627eea, #3c55c9);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: white; font-weight: 700;
+  margin: 0 auto 4px;
+}
+.route-chain-icon.arc-chain { background: linear-gradient(135deg, var(--sky), var(--ink2)); }
+.route-chain-label { font-size: 10px; font-weight: 600; color: var(--steel); font-family: var(--font-mono); }
+.route-path {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.route-path-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(14,165,233,.2), rgba(14,165,233,.6), rgba(14,165,233,.2));
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  overflow: visible;
+}
+.route-path-dot {
+  width: 6px; height: 6px;
+  background: var(--sky);
+  border-radius: 50%;
+  animation: bridgeDotFlow 1.5s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(14,165,233,.6);
+}
+@keyframes bridgeDotFlow {
+  0%, 100% { opacity: .3; transform: scale(.7); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+.route-protocol-badge {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--sky);
+  background: rgba(14,165,233,.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(14,165,233,.2);
+}
+
+/* Bridge estimates */
+.bridge-estimates {
+  background: var(--fog);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.est-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+.est-label { font-size: 12px; color: var(--steel); font-family: var(--font-mono); }
+.est-value { font-size: 12px; font-weight: 600; color: var(--ink); font-family: var(--font-mono); }
+
+/* Protocol badges */
+.bridge-proto-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px; font-weight: 600; letter-spacing: .4px;
+  font-family: var(--font-mono);
+  background: rgba(14,165,233,.05);
+  border: 1px solid var(--border);
+  color: var(--steel);
+}
+.bridge-proto-badge.active-proto {
+  background: rgba(14,165,233,.08);
+  border-color: rgba(14,165,233,.25);
+  color: var(--sky);
+}
+
+/* Chain picker grid */
+.chain-picker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.chain-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .2s;
+  background: var(--fog);
+}
+.chain-picker-item:hover {
+  border-color: var(--sky);
+  background: rgba(14,165,233,.06);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(14,165,233,.12);
+}
+.chain-picker-item.selected {
+  border-color: var(--sky);
+  background: rgba(14,165,233,.08);
+}
+.chain-picker-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.chain-picker-sub { font-size: 10px; color: var(--mist); font-family: var(--font-mono); }
+
+/* Bridge transaction history */
+.bridge-hist-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.bridge-hist-row:last-child { border: none; }
+.bridge-hist-icon {
+  width: 34px; height: 34px;
+  background: rgba(14,165,233,.08);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.bridge-hist-info { flex: 1; min-width: 0; }
+.bridge-hist-label { font-size: 12px; font-weight: 600; color: var(--ink); }
+.bridge-hist-meta { font-size: 10px; color: var(--mist); font-family: var(--font-mono); margin-top: 2px; }
+.bridge-hist-status {
+  font-size: 10px; font-weight: 700; letter-spacing: .4px;
+  padding: 2px 8px; border-radius: 4px; font-family: var(--font-mono);
+}
+.bridge-hist-status.completed { background: rgba(16,185,129,.08); color: #059669; border: 1px solid rgba(16,185,129,.2); }
+.bridge-hist-status.pending { background: rgba(251,191,36,.08); color: #d97706; border: 1px solid rgba(251,191,36,.2); }
+.bridge-hist-status.failed { background: rgba(239,68,68,.07); color: #dc2626; border: 1px solid rgba(239,68,68,.2); }
+
+/* Bridge tracking progress */
+.bridge-progress { display: flex; flex-direction: column; gap: 0; }
+.bridge-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.bridge-step-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  background: white;
+  flex-shrink: 0;
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+  transition: all .4s;
+}
+.bridge-step-dot.pending {
+  border-color: var(--sky);
+  background: rgba(14,165,233,.1);
+  animation: stepPulse 1.5s ease-in-out infinite;
+}
+.bridge-step-dot.active {
+  border-color: var(--sky);
+  background: var(--sky);
+  box-shadow: 0 0 0 4px rgba(14,165,233,.15);
+  animation: stepPulse 1.5s ease-in-out infinite;
+}
+.bridge-step-dot.done {
+  border-color: #10b981;
+  background: #10b981;
+  animation: none;
+}
+.bridge-step-dot.done::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+}
+@keyframes stepPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14,165,233,.4); }
+  50% { box-shadow: 0 0 0 6px rgba(14,165,233,.1); }
+}
+.bridge-step-line {
+  position: absolute;
+  left: 9px;
+  top: 22px;
+  width: 2px;
+  height: calc(100% - 2px);
+  background: var(--border);
+  transition: background .5s;
+}
+.bridge-step-line.filled { background: linear-gradient(to bottom, #10b981, var(--border)); }
+.bridge-step-content { flex: 1; padding-bottom: 0; }
+.bridge-step-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+.bridge-step-desc { font-size: 11px; color: var(--steel); margin-top: 2px; }
+.bridge-step-hash { margin-top: 5px; font-size: 10px; color: var(--sky); font-family: var(--font-mono); word-break: break-all; }
+.bridge-step-hash a { color: var(--sky); text-decoration: none; }
+.bridge-step-hash a:hover { text-decoration: underline; }
+
+/* Bridge track icon animation */
+.bridge-track-icon {
+  font-size: 40px;
+  margin: 0 auto 12px;
+  display: block;
+  text-align: center;
+  animation: bridgeIconBounce 1s ease-in-out infinite alternate;
+}
+@keyframes bridgeIconBounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+/* Bridge page mobile responsive */
+@media (max-width: 768px) {
+  #page-bridge .inner-wrap > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 </style>
-</head>
 <body>
 <!-- TICKER -->
 <!-- FILE:// DETECTION BANNER -->
@@ -1174,6 +1593,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
     <a onclick="nav('portfolio')">Portfolio</a>
     <a onclick="nav('how')">How It Works</a>
     <a onclick="nav('ai')">AI Demo</a>
+    <a onclick="nav('bridge')" style="color:var(--sky)">🌉 Bridge</a>
     <a onclick="nav('faq')">FAQ</a>
   </div>
   <div class="nav-right">
@@ -1215,6 +1635,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
         <div class="ai-pill"><span class="ai-pill-icon">💰</span>Check balance</div>
         <div class="ai-pill"><span class="ai-pill-icon">🔍</span>View history</div>
         <div class="ai-pill"><span class="ai-pill-icon">🚰</span>Get test USDC</div>
+        <div class="ai-pill" style="border-color:rgba(14,165,233,.35);background:rgba(14,165,233,.12)"><span class="ai-pill-icon">🌉</span>Cross-Chain Bridge</div>
       </div>
 
       <!-- AI Prompt Bar -->
@@ -1235,6 +1656,7 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
           <span class="ai-ex-chip" onclick="heroAiSet(this)">"Estimate gas"</span>
           <span class="ai-ex-chip" onclick="heroAiSet(this)">"Open faucet"</span>
           <span class="ai-ex-chip" onclick="heroAiSet(this)">"Show my transactions"</span>
+          <span class="ai-ex-chip" onclick="heroAiSet(this);nav('bridge')" style="border-color:rgba(14,165,233,.4);color:var(--sky)">"Bridge 50 USDC from Base to Arc"</span>
         </div>
       </div>
 
@@ -1732,6 +2154,321 @@ footer::before{content:'';position:absolute;inset:0;background:repeating-linear-
         </div>
 
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- BRIDGE PAGE -->
+<div id="page-bridge" class="page">
+  <div class="inner-wrap" style="max-width:1200px">
+    <div class="pg-eyebrow">Cross-Chain Bridge</div>
+    <h1 class="pg-h1">Bridge across chains.<br><em>AI makes it simple.</em></h1>
+    <p class="pg-sub">Move USDC between Ethereum, Base, Arbitrum, Optimism, Polygon, Solana, and Arc Network — with a single command or a few clicks.</p>
+    <div class="pg-divider"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+
+      <!-- LEFT: Bridge Dashboard -->
+      <div>
+        <!-- AI Bridge Assistant -->
+        <div class="bridge-ai-card" id="bridgeAiCard">
+          <div class="bridge-ai-header">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:28px;height:28px;background:linear-gradient(135deg,var(--sky),var(--ink2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px">✦</div>
+              <div>
+                <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--sky);font-family:var(--font-mono)">AI Bridge Assistant</div>
+                <div style="font-size:10px;color:var(--mist);font-family:var(--font-mono)">Parse intent · Select route · Calculate fees</div>
+              </div>
+            </div>
+            <div style="width:6px;height:6px;background:#10b981;border-radius:50%;animation:pulse 2s infinite;box-shadow:0 0 6px rgba(16,185,129,.4)"></div>
+          </div>
+          <div class="bridge-ai-chat" id="bridgeAiChat">
+            <div class="ai-msg ai-msg-bot">
+              <div class="ai-msg-avatar">🌉</div>
+              <div class="ai-msg-bubble">Hi! I'm your AI Bridge Assistant. Tell me what you'd like to bridge and I'll handle the route, fees, and preview.<br><br>Try: <em>"Bridge 50 USDC from Base to Arc"</em></div>
+            </div>
+          </div>
+          <div class="ai-input-row" style="margin-top:10px">
+            <input class="ai-input" id="bridgeAiInput" placeholder="Bridge 100 USDC from Arbitrum to Arc…" autocomplete="off" onkeydown="if(event.key==='Enter')sendBridgeAI()">
+            <button class="ai-send-btn" onclick="sendBridgeAI()">↑</button>
+          </div>
+          <div class="ai-quick-cmds" style="margin-top:8px">
+            <button class="ai-quick" onclick="setBridgeAIInput(this)">Bridge 50 USDC Base→Arc</button>
+            <button class="ai-quick" onclick="setBridgeAIInput(this)">Move 100 USDC Arbitrum→Arc</button>
+            <button class="ai-quick" onclick="setBridgeAIInput(this)">Cheapest route ETH→Arc</button>
+            <button class="ai-quick" onclick="setBridgeAIInput(this)">Bridge USDC to Base</button>
+          </div>
+        </div>
+
+        <!-- Bridge route protocols -->
+        <div style="margin-top:16px;background:white;border:1px solid var(--border);border-radius:12px;padding:16px 20px">
+          <div style="font-size:10px;font-family:var(--font-mono);letter-spacing:1px;text-transform:uppercase;color:var(--mist);margin-bottom:12px">Supported Protocols (Future-Ready)</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span class="bridge-proto-badge active-proto">Across Protocol</span>
+            <span class="bridge-proto-badge active-proto">LayerZero</span>
+            <span class="bridge-proto-badge active-proto">Stargate</span>
+            <span class="bridge-proto-badge active-proto">Circle CCTP</span>
+            <span class="bridge-proto-badge active-proto">Hyperlane</span>
+          </div>
+          <div style="margin-top:10px;font-size:11px;color:var(--mist);font-family:var(--font-mono)">Arc One auto-selects the optimal protocol for each route based on speed, cost, and security.</div>
+        </div>
+
+        <!-- Bridge Transaction History -->
+        <div style="margin-top:16px;background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mist);font-family:var(--font-mono)">Bridge History</div>
+            <div style="font-size:10px;color:var(--sky);cursor:pointer;font-family:var(--font-mono)" onclick="clearBridgeHistory()">Clear</div>
+          </div>
+          <div id="bridgeHistoryEl" style="padding:0 20px">
+            <div class="tx-empty" style="padding:20px 0">No bridge transactions yet.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Manual Bridge Dashboard -->
+      <div>
+        <div class="bridge-dashboard">
+          <div style="padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:13px;font-weight:700;color:var(--ink)">Bridge Dashboard</div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--sky);font-family:var(--font-mono);background:rgba(14,165,233,.08);padding:3px 10px;border-radius:100px;border:1px solid var(--border2)">
+              <div style="width:5px;height:5px;background:var(--sky2);border-radius:50%;animation:pulse 2s infinite"></div>
+              Live Rates
+            </div>
+          </div>
+
+          <div style="padding:20px 22px">
+            <!-- Chain Selectors -->
+            <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:16px">
+              <div>
+                <label class="sf-lbl">From Chain</label>
+                <div class="chain-select-wrap" onclick="openChainPicker('from')">
+                  <div class="chain-select-inner" id="fromChainDisplay">
+                    <div class="chain-icon" id="fromChainIcon">Ξ</div>
+                    <div>
+                      <div class="chain-select-name" id="fromChainName">Ethereum</div>
+                      <div class="chain-select-sub">Mainnet</div>
+                    </div>
+                  </div>
+                  <div class="chain-select-arrow">▾</div>
+                </div>
+              </div>
+              <button class="bridge-swap-btn" onclick="swapBridgeChains()" title="Swap chains">⇄</button>
+              <div>
+                <label class="sf-lbl">To Chain</label>
+                <div class="chain-select-wrap" onclick="openChainPicker('to')">
+                  <div class="chain-select-inner" id="toChainDisplay">
+                    <div class="chain-icon arc-chain" id="toChainIcon">◈</div>
+                    <div>
+                      <div class="chain-select-name" id="toChainName">Arc Network</div>
+                      <div class="chain-select-sub">Testnet</div>
+                    </div>
+                  </div>
+                  <div class="chain-select-arrow">▾</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Token Selector -->
+            <div style="margin-bottom:16px">
+              <label class="sf-lbl">Token</label>
+              <div class="token-select-wrap">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="width:32px;height:32px;background:linear-gradient(135deg,#2775ca,#1a4d8a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0">$</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:600;color:var(--ink)">USDC</div>
+                    <div style="font-size:10px;color:var(--mist);font-family:var(--font-mono)">USD Coin · Circle</div>
+                  </div>
+                </div>
+                <div style="font-size:10px;color:var(--sky);font-family:var(--font-mono);background:rgba(14,165,233,.08);padding:2px 8px;border-radius:4px;border:1px solid var(--border2)">Only token ▾</div>
+              </div>
+            </div>
+
+            <!-- Amount Input -->
+            <div style="margin-bottom:16px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <label class="sf-lbl" style="margin:0">Amount</label>
+                <div style="font-size:10px;color:var(--mist);font-family:var(--font-mono)">Balance: <span id="bridgeBalDisplay" style="color:var(--sky)">—</span></div>
+              </div>
+              <div class="amt-wrap">
+                <input class="sf-input" id="bridgeAmount" type="number" min="0.01" step="0.01" placeholder="0.00" oninput="updateBridgeEstimate()" style="font-size:18px;padding:12px 70px 12px 14px;font-family:var(--font-mono)">
+                <span class="amt-sfx">USDC</span>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:6px">
+                <button class="bridge-amt-pill" onclick="setBridgeAmt(25)">25%</button>
+                <button class="bridge-amt-pill" onclick="setBridgeAmt(50)">50%</button>
+                <button class="bridge-amt-pill" onclick="setBridgeAmt(75)">75%</button>
+                <button class="bridge-amt-pill" onclick="setBridgeAmt(100)">Max</button>
+              </div>
+            </div>
+
+            <!-- Route Visualization -->
+            <div class="bridge-route-viz" id="bridgeRouteViz">
+              <div class="route-chain-node" id="routeFromNode">
+                <div class="route-chain-icon">Ξ</div>
+                <div class="route-chain-label">Ethereum</div>
+              </div>
+              <div class="route-path">
+                <div class="route-path-line">
+                  <div class="route-path-dot"></div>
+                  <div class="route-path-dot" style="animation-delay:.3s"></div>
+                  <div class="route-path-dot" style="animation-delay:.6s"></div>
+                </div>
+                <div class="route-protocol-badge" id="routeProtocol">Circle CCTP</div>
+              </div>
+              <div class="route-chain-node" id="routeToNode">
+                <div class="route-chain-icon arc-chain">◈</div>
+                <div class="route-chain-label">Arc Network</div>
+              </div>
+            </div>
+
+            <!-- Estimates -->
+            <div class="bridge-estimates" id="bridgeEstimates">
+              <div class="est-row">
+                <span class="est-label">You send</span>
+                <span class="est-value" id="estSend">—</span>
+              </div>
+              <div class="est-row">
+                <span class="est-label">Bridge fee</span>
+                <span class="est-value" id="estFee" style="color:var(--steel)">—</span>
+              </div>
+              <div class="est-row">
+                <span class="est-label">Protocol fee</span>
+                <span class="est-value" id="estProtoFee" style="color:var(--steel)">—</span>
+              </div>
+              <div class="est-row" style="border-top:1px solid var(--border);padding-top:8px;margin-top:4px">
+                <span class="est-label" style="font-weight:700;color:var(--ink)">You receive</span>
+                <span class="est-value" id="estReceive" style="color:var(--sky);font-weight:700">—</span>
+              </div>
+              <div class="est-row" style="padding-top:4px">
+                <span class="est-label">Est. time</span>
+                <span class="est-value" id="estTime" style="color:#10b981">—</span>
+              </div>
+            </div>
+
+            <button class="btn-snd" id="bridgeBtn" onclick="initiateBridge()" style="width:100%;padding:14px;font-size:13px;margin-top:4px;border-radius:10px" disabled>
+              Bridge USDC →
+            </button>
+            <div style="text-align:center;margin-top:8px;font-size:10px;color:var(--mist);font-family:var(--font-mono)">Powered by Circle CCTP · LayerZero · Across</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BRIDGE CHAIN PICKER MODAL -->
+<div class="modal-bg" id="chainPickerModal">
+  <div class="modal-box" style="max-width:400px">
+    <button class="modal-close" onclick="closeModal('chainPickerModal')">✕</button>
+    <div style="font-family:var(--font-serif);font-size:20px;font-weight:300;color:var(--ink);margin-bottom:4px" id="chainPickerTitle">Select Source Chain</div>
+    <div style="font-size:12px;color:var(--steel);margin-bottom:20px">Choose the blockchain network</div>
+    <div class="chain-picker-grid" id="chainPickerGrid"></div>
+  </div>
+</div>
+
+<!-- BRIDGE PREVIEW MODAL -->
+<div class="modal-bg" id="bridgePreviewModal">
+  <div class="modal-box" style="max-width:460px">
+    <button class="modal-close" onclick="closeModal('bridgePreviewModal')">✕</button>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--sky),var(--ink2));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 12px">🌉</div>
+      <div style="font-family:var(--font-serif);font-size:24px;font-weight:300;color:var(--ink)">Bridge Preview</div>
+      <div style="font-size:12px;color:var(--steel);margin-top:4px">Review your bridge transaction before confirming</div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 100%);border-radius:14px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(14,165,233,.03) 0,rgba(14,165,233,.03) 1px,transparent 1px,transparent 20px)"></div>
+      <div style="position:relative;display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center">
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px" id="previewFromIcon">Ξ</div>
+          <div style="font-size:12px;font-weight:600;color:white" id="previewFromChain">Ethereum</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:2px;font-family:var(--font-mono)" id="previewFromAmt">100 USDC</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:20px;color:var(--sky2)">→</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4);font-family:var(--font-mono);margin-top:2px" id="previewProtocol">CCTP</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px" id="previewToIcon">◈</div>
+          <div style="font-size:12px;font-weight:600;color:white" id="previewToChain">Arc Network</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.5);margin-top:2px;font-family:var(--font-mono)" id="previewToAmt">~99.12 USDC</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--fog);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px">
+      <div class="est-row"><span class="est-label">Amount</span><span class="est-value" id="previewAmt">—</span></div>
+      <div class="est-row"><span class="est-label">Bridge fee</span><span class="est-value" id="previewFee">—</span></div>
+      <div class="est-row"><span class="est-label">Protocol fee</span><span class="est-value" id="previewProtoFee">—</span></div>
+      <div class="est-row" style="border-top:1px solid var(--border);padding-top:8px;margin-top:4px">
+        <span class="est-label" style="font-weight:700;color:var(--ink)">You receive</span>
+        <span class="est-value" style="color:var(--sky);font-weight:700" id="previewReceive">—</span>
+      </div>
+      <div class="est-row" style="padding-top:4px">
+        <span class="est-label">Est. completion</span>
+        <span class="est-value" style="color:#10b981" id="previewTime">—</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:10px">
+      <button class="ai-cancel-btn" onclick="closeModal('bridgePreviewModal')" style="padding:13px">Cancel</button>
+      <button class="ai-confirm-btn" onclick="confirmBridge()" style="padding:13px;font-size:12px">Confirm Bridge →</button>
+    </div>
+  </div>
+</div>
+
+<!-- BRIDGE TRACKING MODAL -->
+<div class="modal-bg" id="bridgeTrackModal">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" id="bridgeTrackClose" onclick="closeModal('bridgeTrackModal')">✕</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <div class="bridge-track-icon" id="bridgeTrackIcon">⏳</div>
+      <div style="font-family:var(--font-serif);font-size:22px;font-weight:300;color:var(--ink);margin-bottom:4px" id="bridgeTrackTitle">Bridging in Progress</div>
+      <div style="font-size:12px;color:var(--steel)" id="bridgeTrackSub">Your USDC is on its way across the bridge</div>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="bridge-progress" id="bridgeProgressSteps">
+      <div class="bridge-step" id="bStep1">
+        <div class="bridge-step-dot pending" id="bDot1"></div>
+        <div class="bridge-step-line" id="bLine1"></div>
+        <div class="bridge-step-content">
+          <div class="bridge-step-label">Pending</div>
+          <div class="bridge-step-desc">Transaction submitted to source chain</div>
+          <div class="bridge-step-hash" id="bHash1"></div>
+        </div>
+      </div>
+      <div class="bridge-step" id="bStep2">
+        <div class="bridge-step-dot" id="bDot2"></div>
+        <div class="bridge-step-line" id="bLine2"></div>
+        <div class="bridge-step-content">
+          <div class="bridge-step-label">Confirming</div>
+          <div class="bridge-step-desc">Waiting for source chain confirmations</div>
+        </div>
+      </div>
+      <div class="bridge-step" id="bStep3">
+        <div class="bridge-step-dot" id="bDot3"></div>
+        <div class="bridge-step-line" id="bLine3"></div>
+        <div class="bridge-step-content">
+          <div class="bridge-step-label">Bridging</div>
+          <div class="bridge-step-desc">Protocol routing to destination chain</div>
+        </div>
+      </div>
+      <div class="bridge-step" id="bStep4" style="margin-bottom:0">
+        <div class="bridge-step-dot" id="bDot4"></div>
+        <div class="bridge-step-content">
+          <div class="bridge-step-label">Completed</div>
+          <div class="bridge-step-desc">USDC arrived at destination</div>
+          <div class="bridge-step-hash" id="bHash4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confetti / success overlay -->
+    <div id="bridgeSuccessOverlay" style="display:none;text-align:center;margin-top:16px">
+      <div style="font-size:36px;margin-bottom:8px">✅</div>
+      <div style="font-size:15px;font-weight:600;color:#059669;margin-bottom:4px">Bridge Complete!</div>
+      <div style="font-size:12px;color:var(--steel)" id="bridgeSuccessMsg">USDC has arrived at Arc Network</div>
     </div>
   </div>
 </div>
@@ -2976,7 +3713,6 @@ async function importWallet() {
 // ══ HERO AI BAR ══
 function heroAiSet(el){
   const input = document.getElementById('heroAiInput');
-  // Strip quotes from chip text
   input.value = el.textContent.replace(/[""]/g,'').trim();
   input.focus();
 }
@@ -2986,21 +3722,558 @@ function heroAiGo(){
   const text = input.value.trim();
   if(!text) return;
   input.value = '';
-  if(!walletAddr){
-    // Not connected — open connect modal then queue the message
-    openConnect();
+  // Detect bridge intent — route to bridge page
+  if(/bridge|move.*usdc.*(?:to|from)|route.*usdc/i.test(text)){
+    nav('bridge');
+    setTimeout(()=>{
+      const bi = document.getElementById('bridgeAiInput');
+      if(bi){ bi.value = text; sendBridgeAI(); }
+    }, 250);
     return;
   }
-  // Switch to send tab and inject into AI assistant
+  if(!walletAddr){ openConnect(); return; }
   nav('home');
   setSendMode('ai');
   switchTab('send');
-  // Small delay to ensure AI pane is visible
   setTimeout(()=>{
     document.getElementById('aiInput').value = text;
     sendAIMessage();
   }, 200);
 }
+
+
+// ══════════════════════════════════════════════════
+//  CROSS-CHAIN BRIDGE ENGINE
+// ══════════════════════════════════════════════════
+
+// ── Chain Definitions ──
+const CHAINS = {
+  ethereum:  { id:'ethereum',  name:'Ethereum',    sub:'Mainnet',   icon:'Ξ',  cls:'',      explorer:'https://etherscan.io/tx/',   protocol:'Circle CCTP',  time:'10–15 min', baseFee:1.20, protoFee:0.50 },
+  base:      { id:'base',      name:'Base',         sub:'Mainnet',   icon:'B',  cls:'base',  explorer:'https://basescan.org/tx/',   protocol:'Across',       time:'2–5 min',   baseFee:0.30, protoFee:0.20 },
+  arbitrum:  { id:'arbitrum',  name:'Arbitrum',     sub:'One',       icon:'A',  cls:'arb',   explorer:'https://arbiscan.io/tx/',    protocol:'LayerZero',    time:'3–7 min',   baseFee:0.40, protoFee:0.25 },
+  optimism:  { id:'optimism',  name:'Optimism',     sub:'Mainnet',   icon:'OP', cls:'opt',   explorer:'https://optimistic.etherscan.io/tx/', protocol:'Across', time:'2–4 min', baseFee:0.35, protoFee:0.20 },
+  polygon:   { id:'polygon',   name:'Polygon',      sub:'PoS',       icon:'P',  cls:'poly',  explorer:'https://polygonscan.com/tx/',protocol:'Stargate',    time:'5–10 min',  baseFee:0.50, protoFee:0.30 },
+  solana:    { id:'solana',    name:'Solana',        sub:'Mainnet',   icon:'◎',  cls:'sol',   explorer:'https://solscan.io/tx/',     protocol:'Hyperlane',    time:'1–3 min',   baseFee:0.10, protoFee:0.15 },
+  arc:       { id:'arc',       name:'Arc Network',  sub:'Testnet',   icon:'◈',  cls:'arc-chain', explorer:'https://testnet.arcscan.app/tx/', protocol:'Circle CCTP', time:'<1 min', baseFee:0.00, protoFee:0.00 }
+};
+
+// ── Bridge State ──
+let bridgeState = {
+  fromChain: CHAINS.ethereum,
+  toChain:   CHAINS.arc,
+  amount:    '',
+  history:   []
+};
+
+// ── Utility: append message to bridge AI chat ──
+function bridgeAiMsg(role, html){
+  const wrap = document.getElementById('bridgeAiChat');
+  if(!wrap) return;
+  const div = document.createElement('div');
+  div.className = 'ai-msg ai-msg-' + role;
+  div.innerHTML = role === 'bot'
+    ? `<div class="ai-msg-avatar">🌉</div><div class="ai-msg-bubble">${html}</div>`
+    : `<div class="ai-msg-avatar" style="background:var(--fog);color:var(--steel);border:1px solid var(--border)">You</div><div class="ai-msg-bubble">${html}</div>`;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function bridgeAiTyping(){
+  const wrap = document.getElementById('bridgeAiChat');
+  if(!wrap) return null;
+  const div = document.createElement('div');
+  div.className = 'ai-msg ai-msg-bot';
+  div.id = 'bridgeTypingDot';
+  div.innerHTML = `<div class="ai-msg-avatar">🌉</div><div class="ai-typing"><span></span><span></span><span></span></div>`;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return div;
+}
+
+// ── Parse AI bridge intent ──
+function parseBridgeIntent(text){
+  const lower = text.toLowerCase();
+  const result = { fromChain: null, toChain: null, amount: null, intent: null };
+
+  // Amount
+  const amtMatch = lower.match(/(\d+(?:\.\d+)?)\s*(?:usdc)?/);
+  if(amtMatch) result.amount = parseFloat(amtMatch[1]);
+
+  // Chains — order matters (check "from X to Y", "X to Y", "to Y")
+  const chainMap = {
+    'ethereum':'ethereum', 'eth':'ethereum',
+    'base':'base',
+    'arbitrum':'arbitrum', 'arb':'arbitrum',
+    'optimism':'optimism', 'op':'optimism',
+    'polygon':'polygon', 'matic':'polygon',
+    'solana':'solana', 'sol':'solana',
+    'arc':'arc', 'arc network':'arc', 'arc testnet':'arc'
+  };
+
+  // Try "from X to Y"
+  const fromToMatch = lower.match(/from\s+([\w\s]+?)\s+to\s+([\w\s]+?)(?:\s|$)/);
+  if(fromToMatch){
+    const fRaw = fromToMatch[1].trim();
+    const tRaw = fromToMatch[2].trim();
+    for(const [k,v] of Object.entries(chainMap)){
+      if(fRaw.includes(k)) result.fromChain = CHAINS[v];
+      if(tRaw.includes(k)) result.toChain   = CHAINS[v];
+    }
+  }
+
+  // Fallback: scan whole text
+  if(!result.fromChain || !result.toChain){
+    const found = [];
+    for(const [k,v] of Object.entries(chainMap)){
+      if(lower.includes(k)) found.push(CHAINS[v]);
+    }
+    // Deduplicate by id
+    const uniq = [...new Map(found.map(c=>[c.id,c])).values()];
+    if(!result.fromChain && uniq.length >= 1) result.fromChain = uniq[0];
+    if(!result.toChain   && uniq.length >= 2) result.toChain   = uniq[1];
+  }
+
+  // "cheapest route" intent
+  if(lower.includes('cheap') || lower.includes('best route')) result.intent = 'cheapest';
+  // "my usdc" → just bridge to arc
+  if(lower.includes('my usdc') && !result.toChain) result.toChain = CHAINS.arc;
+
+  return result;
+}
+
+// ── Set bridge input chip text ──
+function setBridgeAIInput(el){
+  const input = document.getElementById('bridgeAiInput');
+  if(input){
+    input.value = el.textContent.replace(/[""]/g,'').trim();
+    input.focus();
+  }
+}
+
+// ── Send AI message in bridge chat ──
+async function sendBridgeAI(){
+  const input = document.getElementById('bridgeAiInput');
+  if(!input) return;
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+
+  bridgeAiMsg('user', text);
+  const typing = bridgeAiTyping();
+  await new Promise(r => setTimeout(r, 900 + Math.random()*600));
+  if(typing) typing.remove();
+
+  const parsed = parseBridgeIntent(text);
+  const lower = text.toLowerCase();
+
+  // "cheapest route" response
+  if(parsed.intent === 'cheapest'){
+    const from = parsed.fromChain || bridgeState.fromChain;
+    bridgeAiMsg('bot',
+      `Here's the cheapest route from <em>${from.name}</em> to Arc Network:<br><br>` +
+      `<strong>🥇 Best:</strong> Base → Arc via Across — ~$0.50 total fee, 2–5 min<br>` +
+      `<strong>🥈 Good:</strong> Optimism → Arc via Across — ~$0.55, 2–4 min<br>` +
+      `<strong>🥉 Decent:</strong> Arbitrum → Arc via LayerZero — ~$0.65, 3–7 min<br><br>` +
+      `Ethereum → Arc is the priciest (~$1.70) but most secure. Want me to set up a specific route?`
+    );
+    return;
+  }
+
+  // Route parsed successfully
+  if(parsed.fromChain && parsed.toChain && parsed.amount){
+    if(parsed.fromChain.id === parsed.toChain.id){
+      bridgeAiMsg('bot', `Source and destination can't be the same chain. Please pick two different chains.`);
+      return;
+    }
+    // Apply to dashboard
+    bridgeState.fromChain = parsed.fromChain;
+    bridgeState.toChain   = parsed.toChain;
+    updateChainDisplay('from', parsed.fromChain);
+    updateChainDisplay('to',   parsed.toChain);
+    document.getElementById('bridgeAmount').value = parsed.amount;
+    bridgeState.amount = parsed.amount;
+    updateBridgeEstimate();
+
+    const fees = calcFees(parsed.fromChain, parsed.toChain, parsed.amount);
+    bridgeAiMsg('bot',
+      `Got it! I've set up your bridge:<br><br>` +
+      `<em>${parsed.amount} USDC</em> from <em>${parsed.fromChain.name}</em> → <em>${parsed.toChain.name}</em><br>` +
+      `Protocol: <em>${parsed.fromChain.protocol}</em><br>` +
+      `Bridge fee: <em>$${fees.totalFee.toFixed(2)}</em> · You receive: <em>${fees.receive.toFixed(4)} USDC</em><br>` +
+      `Est. time: <em>${parsed.fromChain.time}</em><br><br>` +
+      `Review the preview below and click <strong>Bridge USDC →</strong> to proceed.`
+    );
+    document.getElementById('bridgeBtn').disabled = false;
+    return;
+  }
+
+  // Partial match
+  if(parsed.fromChain && parsed.toChain && !parsed.amount){
+    bridgeState.fromChain = parsed.fromChain;
+    bridgeState.toChain   = parsed.toChain;
+    updateChainDisplay('from', parsed.fromChain);
+    updateChainDisplay('to',   parsed.toChain);
+    updateBridgeEstimate();
+    bridgeAiMsg('bot',
+      `Route set: <em>${parsed.fromChain.name}</em> → <em>${parsed.toChain.name}</em> via ${parsed.fromChain.protocol}.<br>` +
+      `How much USDC do you want to bridge?`
+    );
+    return;
+  }
+
+  if(parsed.amount && (!parsed.fromChain || !parsed.toChain)){
+    document.getElementById('bridgeAmount').value = parsed.amount;
+    bridgeState.amount = parsed.amount;
+    updateBridgeEstimate();
+    bridgeAiMsg('bot',
+      `Amount set to <em>${parsed.amount} USDC</em>. Which chains do you want to bridge between?<br><br>` +
+      `Supported: Ethereum, Base, Arbitrum, Optimism, Polygon, Solana, Arc Network.`
+    );
+    return;
+  }
+
+  // Generic bridge help
+  bridgeAiMsg('bot',
+    `I can help you bridge USDC! Try saying:<br><br>` +
+    `• <em>"Bridge 50 USDC from Base to Arc"</em><br>` +
+    `• <em>"Move 100 USDC from Arbitrum to Arc"</em><br>` +
+    `• <em>"What's the cheapest route from Ethereum to Arc?"</em><br>` +
+    `• <em>"Bridge my USDC to Base"</em>`
+  );
+}
+
+// ── Chain picker ──
+let chainPickerTarget = 'from';
+
+function openChainPicker(target){
+  chainPickerTarget = target;
+  const title = document.getElementById('chainPickerTitle');
+  if(title) title.textContent = target === 'from' ? 'Select Source Chain' : 'Select Destination Chain';
+
+  const grid = document.getElementById('chainPickerGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+
+  Object.values(CHAINS).forEach(chain => {
+    const item = document.createElement('div');
+    item.className = 'chain-picker-item' + (bridgeState[target+'Chain'].id === chain.id ? ' selected' : '');
+    item.innerHTML = `
+      <div class="chain-icon ${chain.cls}">${chain.icon}</div>
+      <div>
+        <div class="chain-picker-name">${chain.name}</div>
+        <div class="chain-picker-sub">${chain.sub}</div>
+      </div>
+    `;
+    item.onclick = () => selectChain(chain);
+    grid.appendChild(item);
+  });
+
+  openModal('chainPickerModal');
+}
+
+function selectChain(chain){
+  const other = chainPickerTarget === 'from' ? 'to' : 'from';
+  // Prevent same chain on both sides
+  if(bridgeState[other+'Chain'].id === chain.id){
+    // Swap instead
+    const tmp = bridgeState.fromChain;
+    bridgeState.fromChain = bridgeState.toChain;
+    bridgeState.toChain   = tmp;
+    updateChainDisplay('from', bridgeState.fromChain);
+    updateChainDisplay('to',   bridgeState.toChain);
+    closeModal('chainPickerModal');
+    updateBridgeEstimate();
+    return;
+  }
+  bridgeState[chainPickerTarget+'Chain'] = chain;
+  updateChainDisplay(chainPickerTarget, chain);
+  closeModal('chainPickerModal');
+  updateBridgeEstimate();
+}
+
+function updateChainDisplay(target, chain){
+  const icon = document.getElementById(target+'ChainIcon');
+  const name = document.getElementById(target+'ChainName');
+  if(icon){
+    icon.textContent  = chain.icon;
+    icon.className    = 'chain-icon' + (chain.cls ? ' '+chain.cls : '');
+  }
+  if(name) name.textContent = chain.name;
+
+  // Update route viz
+  const routeIcon  = document.getElementById('route'+(target==='from'?'From':'To')+'Node')?.querySelector('.route-chain-icon');
+  const routeLabel = document.getElementById('route'+(target==='from'?'From':'To')+'Node')?.querySelector('.route-chain-label');
+  if(routeIcon){
+    routeIcon.textContent = chain.icon;
+    routeIcon.className   = 'route-chain-icon' + (chain.cls ? ' '+chain.cls : '');
+  }
+  if(routeLabel) routeLabel.textContent = chain.name;
+
+  // Update protocol badge
+  const protoBadge = document.getElementById('routeProtocol');
+  if(protoBadge) protoBadge.textContent = bridgeState.fromChain.protocol;
+}
+
+function swapBridgeChains(){
+  const tmp = bridgeState.fromChain;
+  bridgeState.fromChain = bridgeState.toChain;
+  bridgeState.toChain   = tmp;
+  updateChainDisplay('from', bridgeState.fromChain);
+  updateChainDisplay('to',   bridgeState.toChain);
+  updateBridgeEstimate();
+}
+
+// ── Fee calculation ──
+function calcFees(fromChain, toChain, amount){
+  const pct       = amount * 0.0012; // 0.12% bridge fee
+  const baseFee   = fromChain.baseFee;
+  const protoFee  = fromChain.protoFee;
+  const totalFee  = pct + baseFee + protoFee;
+  const receive   = Math.max(0, amount - totalFee);
+  return { pct, baseFee, protoFee, totalFee, receive };
+}
+
+function setBridgeAmt(pct){
+  const bal = parseFloat(document.getElementById('bridgeBalDisplay')?.textContent) || 100;
+  const amt  = pct === 100 ? bal : parseFloat((bal * pct / 100).toFixed(4));
+  document.getElementById('bridgeAmount').value = amt;
+  bridgeState.amount = amt;
+  updateBridgeEstimate();
+}
+
+function updateBridgeEstimate(){
+  const raw = parseFloat(document.getElementById('bridgeAmount')?.value);
+  if(!raw || raw <= 0){
+    ['estSend','estFee','estProtoFee','estReceive','estTime'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.textContent = '—';
+    });
+    document.getElementById('bridgeBtn').disabled = true;
+    return;
+  }
+
+  bridgeState.amount = raw;
+  const f = calcFees(bridgeState.fromChain, bridgeState.toChain, raw);
+
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  set('estSend',      raw.toFixed(4) + ' USDC');
+  set('estFee',       '$' + (f.baseFee + f.pct).toFixed(4) + ' USDC');
+  set('estProtoFee',  '$' + f.protoFee.toFixed(4) + ' USDC');
+  set('estReceive',   f.receive.toFixed(4) + ' USDC');
+  set('estTime',      bridgeState.fromChain.time);
+
+  document.getElementById('bridgeBtn').disabled = (raw <= 0 || f.receive <= 0);
+
+  // Update balance display
+  const balEl = document.getElementById('bridgeBalDisplay');
+  if(balEl && balEl.textContent === '—'){
+    const wbal = parseFloat(document.getElementById('wBal')?.textContent) || 0;
+    balEl.textContent = wbal > 0 ? wbal.toFixed(4) + ' USDC' : 'Connect wallet';
+  }
+}
+
+// ── Initiate bridge → show preview modal ──
+function initiateBridge(){
+  const amount = parseFloat(document.getElementById('bridgeAmount')?.value);
+  if(!amount || amount <= 0) return;
+
+  const f = calcFees(bridgeState.fromChain, bridgeState.toChain, amount);
+
+  // Populate preview modal
+  const setEl = (id,v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  setEl('previewFromChain', bridgeState.fromChain.name);
+  setEl('previewToChain',   bridgeState.toChain.name);
+  setEl('previewFromAmt',   amount + ' USDC');
+  setEl('previewToAmt',     '~' + f.receive.toFixed(4) + ' USDC');
+  setEl('previewAmt',       amount.toFixed(4) + ' USDC');
+  setEl('previewFee',       '$' + (f.baseFee + f.pct).toFixed(4));
+  setEl('previewProtoFee',  '$' + f.protoFee.toFixed(4));
+  setEl('previewReceive',   f.receive.toFixed(4) + ' USDC');
+  setEl('previewTime',      bridgeState.fromChain.time);
+  setEl('previewProtocol',  bridgeState.fromChain.protocol);
+
+  const fromIcon = document.getElementById('previewFromIcon');
+  const toIcon   = document.getElementById('previewToIcon');
+  if(fromIcon){ fromIcon.textContent = bridgeState.fromChain.icon; fromIcon.style.fontSize='26px'; }
+  if(toIcon){   toIcon.textContent   = bridgeState.toChain.icon;   toIcon.style.fontSize='26px'; }
+
+  openModal('bridgePreviewModal');
+}
+
+// ── Confirm bridge → open tracking modal ──
+function confirmBridge(){
+  closeModal('bridgePreviewModal');
+  openModal('bridgeTrackModal');
+
+  // Reset tracking UI
+  ['bDot1','bDot2','bDot3','bDot4'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.className = 'bridge-step-dot';
+  });
+  ['bLine1','bLine2','bLine3'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.className = 'bridge-step-line';
+  });
+  const successOv = document.getElementById('bridgeSuccessOverlay');
+  if(successOv) successOv.style.display = 'none';
+
+  const closeBtn = document.getElementById('bridgeTrackClose');
+  if(closeBtn) closeBtn.style.display = 'none';
+
+  const title = document.getElementById('bridgeTrackTitle');
+  const sub   = document.getElementById('bridgeTrackSub');
+  const icon  = document.getElementById('bridgeTrackIcon');
+  if(title) title.textContent = 'Bridging in Progress';
+  if(sub)   sub.textContent   = `${bridgeState.amount} USDC · ${bridgeState.fromChain.name} → ${bridgeState.toChain.name}`;
+  if(icon)  icon.textContent  = '⏳';
+
+  runBridgeTracking();
+}
+
+// ── Mock bridge tracking simulation ──
+async function runBridgeTracking(){
+  const amount = bridgeState.amount;
+  const from   = bridgeState.fromChain;
+  const to     = bridgeState.toChain;
+
+  // Generate mock hashes
+  const srcHash  = '0x' + [...Array(64)].map(()=>Math.floor(Math.random()*16).toString(16)).join('');
+  const destHash = '0x' + [...Array(64)].map(()=>Math.floor(Math.random()*16).toString(16)).join('');
+
+  const setDot  = (id, cls)  => { const el = document.getElementById(id); if(el) el.className = 'bridge-step-dot '+cls; };
+  const setLine = (id, cls)  => { const el = document.getElementById(id); if(el) el.className = 'bridge-step-line '+cls; };
+  const setHash = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+
+  // Step 1 – Pending
+  setDot('bDot1','pending');
+  await delay(1400);
+
+  // Step 1 done + hash
+  setDot('bDot1','done');
+  setLine('bLine1','filled');
+  setHash('bHash1',
+    `Src: <a href="${from.explorer}${srcHash}" target="_blank">${srcHash.slice(0,10)}…${srcHash.slice(-6)} ↗</a>`
+  );
+
+  // Step 2 – Confirming
+  setDot('bDot2','active');
+  await delay(2000);
+  setDot('bDot2','done');
+  setLine('bLine2','filled');
+
+  // Step 3 – Bridging
+  setDot('bDot3','active');
+  await delay(2600);
+  setDot('bDot3','done');
+  setLine('bLine3','filled');
+
+  // Step 4 – Completed
+  setDot('bDot4','done');
+  await delay(700);
+
+  // Update header
+  const icon  = document.getElementById('bridgeTrackIcon');
+  const title = document.getElementById('bridgeTrackTitle');
+  const sub   = document.getElementById('bridgeTrackSub');
+  if(icon)  icon.textContent  = '✅';
+  if(title) title.textContent = 'Bridge Complete!';
+  if(sub)   sub.textContent   = `USDC arrived at ${to.name}`;
+
+  // Dest hash
+  setHash('bHash4',
+    `Dst: <a href="${to.explorer}${destHash}" target="_blank">${destHash.slice(0,10)}…${destHash.slice(-6)} ↗</a>`
+  );
+
+  // Success overlay
+  const overlay = document.getElementById('bridgeSuccessOverlay');
+  const sucMsg  = document.getElementById('bridgeSuccessMsg');
+  if(sucMsg) sucMsg.textContent = `${amount} USDC has arrived at ${to.name}`;
+  if(overlay){ overlay.style.display = 'block'; overlay.style.animation = 'paneIn .4s ease both'; }
+
+  // Show close button
+  const closeBtn = document.getElementById('bridgeTrackClose');
+  if(closeBtn) closeBtn.style.display = 'block';
+
+  // Add to history
+  addBridgeHistory({
+    from:   from.name,
+    to:     to.name,
+    amount: amount,
+    srcHash, destHash,
+    protocol: from.protocol,
+    status: 'completed',
+    time:   new Date().toLocaleTimeString()
+  });
+
+  // Confetti burst
+  spawnBridgeConfetti();
+}
+
+function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+// ── Bridge history ──
+function addBridgeHistory(tx){
+  bridgeState.history.unshift(tx);
+  renderBridgeHistory();
+}
+
+function renderBridgeHistory(){
+  const el = document.getElementById('bridgeHistoryEl');
+  if(!el) return;
+  if(!bridgeState.history.length){
+    el.innerHTML = '<div class="tx-empty" style="padding:20px 0">No bridge transactions yet.</div>';
+    return;
+  }
+  el.innerHTML = bridgeState.history.slice(0,5).map(tx => `
+    <div class="bridge-hist-row">
+      <div class="bridge-hist-icon">🌉</div>
+      <div class="bridge-hist-info">
+        <div class="bridge-hist-label">${tx.amount} USDC · ${tx.from} → ${tx.to}</div>
+        <div class="bridge-hist-meta">${tx.protocol} · ${tx.time}</div>
+      </div>
+      <div class="bridge-hist-status ${tx.status}">${tx.status}</div>
+    </div>
+  `).join('');
+}
+
+function clearBridgeHistory(){
+  bridgeState.history = [];
+  renderBridgeHistory();
+}
+
+// ── Confetti celebration on bridge complete ──
+function spawnBridgeConfetti(){
+  const colors = ['#0ea5e9','#38bdf8','#7dd3fc','#10b981','#34d399','#ffffff'];
+  for(let i=0;i<28;i++){
+    const el = document.createElement('div');
+    el.style.cssText = `
+      position:fixed;z-index:9999;pointer-events:none;
+      width:${6+Math.random()*7}px;height:${6+Math.random()*7}px;
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      left:${30+Math.random()*40}%;
+      top:${40+Math.random()*20}%;
+      opacity:1;
+      --drift:${(Math.random()-0.5)*120}px;
+      animation:confettiFall ${1.2+Math.random()*.8}s ease forwards ${Math.random()*.4}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 2200);
+  }
+}
+
+// ── Init bridge on page load ──
+(function initBridge(){
+  // Set initial chain displays
+  updateChainDisplay('from', bridgeState.fromChain);
+  updateChainDisplay('to',   bridgeState.toChain);
+  // Sync balance if wallet already connected
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const wbal = parseFloat(document.getElementById('wBal')?.textContent);
+    const balEl = document.getElementById('bridgeBalDisplay');
+    if(balEl && wbal > 0) balEl.textContent = wbal.toFixed(4) + ' USDC';
+  });
+})();
 
 </script>
 </body>
