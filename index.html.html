@@ -1554,7 +1554,7 @@ async function connectWallet(walletId) {
     <div class="wallet-connecting">
       <div class="wc-spinner"></div>
       <div class="wallet-connecting-text">Waiting for ${walletInfo?.name || 'wallet'}…</div>
-      <div class="wallet-connecting-sub">Approve the connection request in your wallet extension.<br>Do not close this window.</div>
+      <div class="wallet-connecting-sub">Approve the connection request in your wallet extension.<br>A free signature request will follow to verify ownership.<br>Do not close this window.</div>
       <div class="wc-cancel"><button class="btn btn-ghost btn-sm" onclick="showWalletList()">← Back</button></div>
     </div>`;
 
@@ -1587,6 +1587,50 @@ async function connectWallet(walletId) {
     const signer = provider.getSigner();
     const address = await signer.getAddress();
     const network = await provider.getNetwork();
+
+    // ── SIGNATURE VERIFICATION ──────────────────────────────────────
+    // Show sign-to-verify prompt
+    document.getElementById('walletModalTitle').textContent = 'Verify Ownership';
+    document.getElementById('walletModalBody').innerHTML = `
+      <div class="wallet-connecting">
+        <div class="wc-spinner"></div>
+        <div class="wallet-connecting-text">Sign to verify wallet</div>
+        <div class="wallet-connecting-sub">
+          A signature request has been sent to ${walletInfo?.name || 'your wallet'}.<br>
+          <strong>This is a free verification — no gas, no transaction.</strong><br>
+          Simply sign the message to confirm ownership.
+        </div>
+        <div class="wc-cancel"><button class="btn btn-ghost btn-sm" onclick="showWalletList()">← Cancel</button></div>
+      </div>`;
+
+    const timestamp = Date.now();
+    const nonce = Math.random().toString(36).slice(2, 10);
+    const message =
+      `Arc One — Wallet Verification\n\n` +
+      `I confirm I own this wallet and authorize connection to Arc One.\n\n` +
+      `Address: ${address}\n` +
+      `Nonce: ${nonce}\n` +
+      `Timestamp: ${timestamp}\n\n` +
+      `This request will NOT trigger any transaction or gas fee.`;
+
+    let signature;
+    try {
+      signature = await signer.signMessage(message);
+    } catch (signErr) {
+      const rejected = signErr?.code === 4001 ||
+        (signErr?.message || '').toLowerCase().includes('user rejected') ||
+        (signErr?.message || '').toLowerCase().includes('user denied');
+      throw new Error(rejected
+        ? 'Signature declined. You must sign the verification message to connect.'
+        : 'Signature failed: ' + (signErr?.message || 'Unknown error'));
+    }
+
+    // Verify the signature matches the address (client-side check)
+    const recovered = ethers.utils.verifyMessage(message, signature);
+    if (recovered.toLowerCase() !== address.toLowerCase()) {
+      throw new Error('Signature verification failed — recovered address does not match.');
+    }
+    // ── END SIGNATURE VERIFICATION ──────────────────────────────────
 
     state.connected  = true;
     state.address    = address;
