@@ -3061,25 +3061,35 @@ function generateSmartFallback(text) {
   const short = addr ? addr.slice(0,6) + '…' + addr.slice(-4) : null;
   const usdc  = state.usdcBalance || '—';
 
-  // Balance query
-  if (/balance|how much|wallet|funds|usdc/.test(t)) {
+  // ORDER MATTERS: most specific patterns first, generic "balance/usdc" check LAST
+
+  // Bridge — check before send/balance since it contains "usdc"
+  if (/bridge|cross.?chain|move.*usdc|usdc.*arc|arc.*usdc/.test(t)) {
+    const amtM = t.match(/(\d+\.?\d*)\s*usdc/);
+    const amt  = amtM ? amtM[1] : '50';
+    const fromM = t.match(/from\s+(\w+)/i);
+    const toM   = t.match(/to\s+(\w+(?:\s+\w+)?)/i);
+    const fromNet = fromM ? fromM[1] : 'Base';
+    const toNet   = toM   ? toM[1]   : 'Arc Network';
+    const fee = (+amt * 0.0038 + 0.18).toFixed(2);
+    const receive = Math.max(0, +amt - +fee).toFixed(2);
     if (!state.connected) {
-      return { raw:'Connect your wallet to see your live USDC and ETH balances.', text: buildActionCard('🔌', 'Wallet Required', 'Connect your wallet first to check your live USDC balance.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
+      return { raw:'Connect your wallet to bridge USDC.', text: buildActionCard('🌉', 'Bridge USDC', 'Connect your wallet to bridge USDC between Base, Ethereum, and Arc Network via Circle CCTP.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
     }
-    fetchBalance();
-    return { raw:`Balance for ${short}: ${usdc} USDC`, text: buildBalanceCard(usdc, short, getNetworkName(state.chainId||1)), isHTML: true, action: null };
+    return { raw:`Preparing bridge for ${amt} USDC from ${fromNet} to ${toNet}…`, text: buildActionCard('🌉', `Bridge ${amt} USDC — Circle CCTP`, `Route: ${fromNet} → ${toNet}\nFee: ≈${fee} USDC  |  ETA: 2–4 min\nYou receive: ≈${receive} USDC on ${toNet}`, [{label:'Open Bridge Form', onclick:"go('swap');setSwapTab('bridge')"}]), isHTML: true, action: {type:'prefillBridge', fromChain:'base', toChain:'arc', amount:amt} };
   }
 
-  // Recent transactions
-  if (/transaction|recent|history|activity/.test(t)) {
-    if (!state.connected) {
-      return { raw:'Connect your wallet to view transactions.', text: buildActionCard('📋', 'Connect Wallet First', 'Connect your wallet to view recent transactions on ArcScan.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
-    }
-    return { raw:'Opening transaction history…', text: buildActionCard('📋', 'Transaction History', `Viewing on-chain activity for ${short}. Opening your transactions page.`, [{label:'View Transactions', onclick:"go('transactions')"}]), isHTML: true, action: {type:'navigate', page:'transactions'} };
+  // Swap — check before balance since "swap usdc" contains usdc
+  if (/swap|exchange|convert/.test(t)) {
+    const fromM = t.match(/swap\s+(\w+)/i);
+    const toM   = t.match(/to\s+(\w+)/i);
+    const fromTok = fromM ? fromM[1].toUpperCase() : 'USDC';
+    const toTok   = toM   ? toM[1].toUpperCase()   : 'ETH';
+    return { raw:`Opening swap: ${fromTok} → ${toTok}…`, text: buildActionCard('⇄', `Swap ${fromTok} → ${toTok}`, `Opening swap interface for ${fromTok} → ${toTok}.\nConnect wallet and enter amount, then approve in your wallet.\nNo tokens are moved until you sign.`, [{label:'Open Swap', onclick:"go('swap');setSwapTab('swap')"}]), isHTML: true, action: {type:'navigate', page:'swap'} };
   }
 
-  // Send
-  if (/send|transfer|pay/.test(t)) {
+  // Send — check before balance since "send 10 usdc" contains usdc
+  if (/\bsend\b|\btransfer\b|\bpay\b/.test(t)) {
     const amtM = t.match(/(\d+\.?\d*)\s*usdc/);
     const toM  = t.match(/to\s+(0x[a-f0-9]{4,})/i);
     const amt  = amtM ? amtM[1] : '';
@@ -3087,36 +3097,40 @@ function generateSmartFallback(text) {
     if (!state.connected) {
       return { raw:'Connect your wallet to send USDC.', text: buildActionCard('↗', 'Send USDC', 'Connect your wallet to send USDC to any address on Arc Network.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
     }
-    return { raw:`Opening send form${amt?' with '+amt+' USDC':''}…`, text: buildActionCard('↗', 'Send USDC' + (amt ? ' — ' + amt + ' USDC' : ''), `Opening the send form${to ? ' to ' + to.slice(0,8) + '…' : ''}. Confirm all details before signing.`, [{label:'Open Send Form', onclick:`go('send')`}]), isHTML: true, action: {type:'prefillSend', to, amount:amt} };
+    const fee = 0.02;
+    const total = amt ? (+amt + fee).toFixed(2) : fee.toFixed(2);
+    return { raw:`Opening send form${amt?' for '+amt+' USDC':''}…`, text: buildActionCard('↗', 'Send USDC' + (amt ? ` — ${amt} USDC` : ''), `${amt ? `Amount: ${amt} USDC\nNetwork fee: ≈${fee} USDC\nTotal debit: ≈${total} USDC` : 'Enter amount and recipient on the Send page.'}\n\nNo transaction is signed without your wallet confirmation.`, [{label:'Open Send Form', onclick:"go('send')"}]), isHTML: true, action: {type:'prefillSend', to, amount:amt} };
   }
 
-  // Bridge
-  if (/bridge|cross.?chain|move.*usdc|transfer.*arc/.test(t)) {
-    const amtM = t.match(/(\d+\.?\d*)\s*usdc/);
-    const amt  = amtM ? amtM[1] : '100';
+  // Recent transactions
+  if (/transaction|recent|history|activity/.test(t)) {
     if (!state.connected) {
-      return { raw:'Connect your wallet to bridge USDC.', text: buildActionCard('🌉', 'Bridge USDC', 'Connect your wallet to bridge USDC between Base, Ethereum, and Arc Network via Circle CCTP.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
+      return { raw:'Connect your wallet to view transactions.', text: buildActionCard('📋', 'Connect Wallet First', 'Connect your wallet to view recent transactions on ArcScan.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
     }
-    return { raw:`Preparing bridge for ${amt} USDC…`, text: buildActionCard('🌉', 'Bridge USDC — Circle CCTP', `Bridging ${amt} USDC via Circle CCTP.\nFee: ≈${(+amt*0.0038+0.18).toFixed(2)} USDC | ETA: 2–4 min\nYou receive: ≈${(+amt - (+amt*0.0038+0.18)).toFixed(2)} USDC on Arc Network`, [{label:'Open Bridge Form', onclick:`go('swap');setSwapTab('bridge')`}]), isHTML: true, action: {type:'prefillBridge', fromChain:'base', toChain:'arc', amount:amt} };
-  }
-
-  // Swap
-  if (/swap|exchange|convert/.test(t)) {
-    return { raw:'Opening swap interface…', text: buildActionCard('⇄', 'Swap Tokens', 'Opening the swap interface. Select tokens and enter amount, then approve in your wallet.', [{label:'Open Swap', onclick:`go('swap');setSwapTab('swap')`}]), isHTML: true, action: {type:'navigate', page:'swap'} };
+    return { raw:'Opening transaction history…', text: buildActionCard('📋', 'Transaction History', `Viewing on-chain activity for ${short}.\nOpening your transactions page now.`, [{label:'View Transactions', onclick:"go('transactions')"}]), isHTML: true, action: {type:'navigate', page:'transactions'} };
   }
 
   // Gas
-  if (/gas|fee|cost/.test(t)) {
-    return { raw:'Arc transfer fee: ≈$0.02 USDC. Bridge Base→Arc: ≈0.38 USDC.', text: buildActionCard('⛽', 'Gas Estimates', 'Arc Testnet: ≈$0.02 USDC per transfer\nBridge Base → Arc: ≈0.38 USDC\nEthereum mainnet: ~$3–8+ USDC', [{label:'Gas Estimator', onclick:`go('gas')`}]), isHTML: true, action: null };
+  if (/\bgas\b|\bfee\b|\bcost\b/.test(t)) {
+    return { raw:'Arc transfer fee: ≈$0.02 USDC. Bridge Base→Arc: ≈0.38 USDC.', text: buildActionCard('⛽', 'Gas Estimates', 'Arc Testnet: ≈$0.02 USDC per transfer\nBridge Base → Arc: ≈0.38 USDC\nEthereum mainnet: ~$3–8+ USDC\n\nArc Network uses USDC as the gas token.', [{label:'Gas Estimator', onclick:"go('gas')"}]), isHTML: true, action: null };
   }
 
   // Faucet
   if (/faucet|testnet|get usdc|free/.test(t)) {
-    return { raw:'Go to the Faucet page to claim testnet USDC from Circle.', text: buildActionCard('🚰', 'Get Testnet USDC', 'Claim free Arc Testnet USDC from Circle Faucet or thirdweb. Connect your wallet to auto-fill your address.', [{label:'Open Faucet', onclick:`go('faucet')`}]), isHTML: true, action: {type:'navigate', page:'faucet'} };
+    return { raw:'Go to the Faucet page to claim testnet USDC from Circle.', text: buildActionCard('🚰', 'Get Testnet USDC', 'Claim free Arc Testnet USDC from Circle Faucet or thirdweb.\nConnect your wallet to auto-fill your address.', [{label:'Open Faucet', onclick:"go('faucet')"}]), isHTML: true, action: {type:'navigate', page:'faucet'} };
+  }
+
+  // Balance — LAST because "usdc" appears in almost every query
+  if (/balance|how much|wallet|funds/.test(t)) {
+    if (!state.connected) {
+      return { raw:'Connect your wallet to see your live USDC and ETH balances.', text: buildActionCard('🔌', 'Wallet Required', 'Connect your wallet first to check your live USDC balance.', [{label:'Connect Wallet', onclick:'openWalletModal()'}]), isHTML: true, action: null };
+    }
+    fetchBalance();
+    return { raw:`Balance for ${short}: ${usdc} USDC`, text: buildBalanceCard(usdc, short, getNetworkName(state.chainId||1)), isHTML: true, action: null };
   }
 
   // Default
-  return { raw:'How can I help? I can check balances, bridge, send, or swap USDC.', text: buildActionCard('✦', 'Arc One Copilot', 'I can help you:\n• Check USDC balance\n• Bridge USDC cross-chain\n• Send USDC to any address\n• Swap tokens\n• View transactions', [{label:'Check Balance', onclick:`quickAI('Check my USDC balance')`},{label:'Bridge USDC', onclick:`quickAI('Bridge 50 USDC from Base to Arc Network')`}]), isHTML: true, action: null };
+  return { raw:'How can I help? I can check balances, bridge, send, or swap USDC.', text: buildActionCard('✦', 'Arc One Copilot', 'I can help you:\n• Check USDC balance\n• Bridge USDC cross-chain\n• Send USDC to any address\n• Swap tokens\n• View transactions', [{label:'Check Balance', onclick:"quickAI('Check my USDC balance')"},{label:'Bridge USDC', onclick:"quickAI('Bridge 50 USDC from Base to Arc Network')"}]), isHTML: true, action: null };
 }
 
 function buildActionCard(icon, title, body, buttons=[]) {
