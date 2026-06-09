@@ -243,28 +243,60 @@ button,input,select,textarea{font-family:var(--font)}
 .modal-close:hover{background:var(--border);color:var(--ink)}
 .modal-body{padding:20px 22px}
 .modal-sub{font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6}
-.wallet-list{display:grid;gap:8px}
-.wallet-option{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .18s;background:var(--surface2)}
-.wallet-option:hover{border-color:var(--accent-border);background:white;box-shadow:var(--shadow)}
-.wallet-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1px solid var(--border)}
+
+/* Wallet list */
+.wallet-list{display:grid;gap:8px;margin-bottom:4px}
+.wallet-option{display:flex;align-items:center;gap:14px;padding:13px 16px;border:1.5px solid var(--border);border-radius:14px;cursor:pointer;transition:all .18s;background:var(--surface2);width:100%;text-align:left}
+.wallet-option:hover{border-color:var(--accent);background:white;box-shadow:0 4px 16px rgba(79,70,229,.1);transform:translateY(-1px)}
+.wallet-option:active{transform:translateY(0)}
+.wallet-option.detected::after{content:'Detected';font-size:10px;font-family:var(--font-mono);background:var(--green-bg);color:var(--green);border:1px solid rgba(16,185,129,.25);border-radius:100px;padding:2px 8px;margin-left:auto;margin-right:8px;white-space:nowrap}
+.wallet-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border);overflow:hidden}
+.wallet-ico img,.wallet-ico svg{width:26px;height:26px}
 .wallet-info{flex:1;min-width:0}
 .wallet-name{font-weight:700;font-size:14px;color:var(--ink)}
 .wallet-desc{font-size:11.5px;color:var(--muted);margin-top:2px}
-.wallet-arrow{color:var(--muted2);font-size:16px}
-.modal-note{margin-top:16px;font-size:11.5px;color:var(--muted2);text-align:center;line-height:1.6;padding:12px;background:var(--surface2);border-radius:8px;font-family:var(--font-mono)}
-.wallet-connecting{text-align:center;padding:24px 0}
-.wallet-connecting-ico{font-size:48px;margin-bottom:14px;animation:spinSlow 2s linear infinite}
-@keyframes spinSlow{to{transform:rotate(360deg)}}
-.wallet-connecting-text{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
-.wallet-connecting-sub{font-size:12px;color:var(--muted)}
-.wallet-rejected{text-align:center;padding:24px 0}
-.wallet-rejected-ico{font-size:42px;margin-bottom:12px}
-.wallet-rejected-text{font-size:14px;font-weight:600;color:var(--red);margin-bottom:6px}
-.wallet-rejected-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.wallet-arrow{color:var(--muted2);font-size:18px;font-weight:300;flex-shrink:0}
+.modal-note{margin-top:16px;font-size:11px;color:var(--muted2);text-align:center;line-height:1.6;padding:10px 14px;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:6px}
 
-/* ── CONNECTED BADGE ── */
-.connected-pill{display:inline-flex;align-items:center;gap:7px;background:var(--green-bg);border:1px solid rgba(16,185,129,.2);border-radius:100px;padding:6px 12px;font-size:11.5px;font-family:var(--font-mono);color:var(--green);cursor:pointer}
-.connected-pill:hover{background:#d1fae5}
+/* Connecting state */
+.wallet-connecting{text-align:center;padding:28px 0 20px}
+.wc-spinner{width:52px;height:52px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:wcSpin .8s linear infinite;margin:0 auto 18px}
+@keyframes wcSpin{to{transform:rotate(360deg)}}
+.wallet-connecting-text{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;font-family:var(--font-head)}
+.wallet-connecting-sub{font-size:12px;color:var(--muted);line-height:1.6}
+.wc-cancel{margin-top:20px}
+
+/* Error / rejected state */
+.wallet-rejected{text-align:center;padding:24px 0 16px}
+.wallet-rejected-ico{width:52px;height:52px;border-radius:50%;background:#fef2f2;border:1.5px solid #fecaca;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px}
+.wallet-rejected-text{font-size:14px;font-weight:700;color:var(--red);margin-bottom:6px;font-family:var(--font-head)}
+.wallet-rejected-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6}
+
+/* ── CONNECTED BADGE + DROPDOWN ── */
+.wallet-btn-wrap{position:relative;display:inline-flex}
+.connected-pill{display:inline-flex;align-items:center;gap:8px;background:white;border:1.5px solid var(--border);border-radius:100px;padding:5px 13px 5px 7px;font-size:12px;font-family:var(--font-mono);color:var(--ink);cursor:pointer;transition:all .18s;font-weight:600;box-shadow:var(--shadow)}
+.connected-pill:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(79,70,229,.1)}
+.conn-dot{width:7px;height:7px;background:var(--green);border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px rgba(16,185,129,.2)}
+.wallet-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white;font-family:var(--font-head)}
+.conn-network{font-size:10px;color:var(--muted);font-family:var(--font-mono);font-weight:500}
+.pill-chevron{color:var(--muted2);font-size:10px;margin-left:2px;transition:transform .2s}
+.wallet-btn-wrap.open .pill-chevron{transform:rotate(180deg)}
+
+/* Wallet dropdown */
+.wallet-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:white;border:1.5px solid var(--border);border-radius:16px;box-shadow:0 16px 48px rgba(13,17,23,.16);min-width:240px;z-index:1000;overflow:hidden;opacity:0;pointer-events:none;transform:translateY(-8px) scale(.97);transform-origin:top right;transition:all .18s}
+.wallet-btn-wrap.open .wallet-dropdown{opacity:1;pointer-events:all;transform:none}
+.wd-head{padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.wd-addr{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.wd-net{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.wd-net-dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+.wd-body{padding:6px}
+.wd-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-size:13px;color:var(--ink);transition:all .14s}
+.wd-item:hover{background:var(--surface2)}
+.wd-item.danger{color:var(--red)}
+.wd-item.danger:hover{background:#fef2f2}
+.wd-ico{width:28px;height:28px;border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1px solid var(--border)}
+.wd-item.danger .wd-ico{background:#fef2f2;border-color:#fecaca}
+.wd-divider{height:1px;background:var(--border);margin:4px 6px}
 .conn-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
 
 /* ── CHAT ── */
@@ -1337,6 +1369,8 @@ const state = {
   provider: null,
   signer: null,
   walletName: null,
+  walletId: null,
+  chainId: null,
   fromToken: { sym: 'USDC', ico: '$', bg: '#e0f2fe' },
   toToken: null,
   tokenModalTarget: 'from',
@@ -1396,16 +1430,57 @@ function closeSidebar() {
 }
 
 /* ══════════════════════════════════════════════
-   WALLET CONNECTION — REAL IMPLEMENTATION
+   WALLET SVG ICONS
+══════════════════════════════════════════════ */
+const WALLET_ICONS = {
+  metamask: `<svg viewBox="0 0 35 33" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M32.958.5L19.42 10.22l2.5-5.9L32.958.5z" fill="#E17726" stroke="#E17726" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M2.042.5l13.42 9.8-2.38-5.98L2.042.5z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M28.16 23.54l-3.6 5.5 7.7 2.12 2.2-7.48-6.3-.14z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M.56 23.68l2.18 7.48 7.68-2.12-3.58-5.5-6.28.14z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.06 14.5l-2.12 3.22 7.56.34-.26-8.12-5.18 4.56z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M24.94 14.5l-5.26-4.66-.18 8.22 7.56-.34-2.12-3.22z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.42 29.04l4.56-2.2-3.94-3.08-.62 5.28z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.02 26.84l4.56 2.2-.62-5.28-3.94 3.08z" fill="#E27625" stroke="#E27625" stroke-width=".25" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  rabby: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#8697FF"/><path d="M10 26c0-5.523 4.477-10 10-10s10 4.477 10 10H10z" fill="white" fill-opacity=".9"/><circle cx="20" cy="16" r="5" fill="white"/></svg>`,
+  coinbase: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#0052FF"/><circle cx="20" cy="20" r="10" fill="white"/><circle cx="20" cy="20" r="6" fill="#0052FF"/></svg>`,
+  walletconnect: `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" rx="10" fill="#3B99FC"/><path d="M12 17.5c4.4-4.3 11.6-4.3 16 0l.53.52a.55.55 0 010 .78l-1.8 1.76a.28.28 0 01-.4 0L25.6 19.8c-3.07-3-8.05-3-11.12 0l-.75.73a.28.28 0 01-.4 0l-1.8-1.76a.55.55 0 010-.78L12 17.5zm19.76 3.67l1.6 1.57a.55.55 0 010 .78l-7.22 7.07a.56.56 0 01-.78 0L20 25.22l-5.36 5.25a.56.56 0 01-.78 0L6.64 23.4a.55.55 0 010-.78l1.6-1.57a.56.56 0 01.78 0L14.4 26.3l5.36-5.25a.56.56 0 01.78 0l5.36 5.25 5.1-4.98a.56.56 0 01.78-.2z" fill="white"/></svg>`,
+};
+
+/* ══════════════════════════════════════════════
+   WALLET OPTIONS CONFIG
 ══════════════════════════════════════════════ */
 const WALLET_OPTIONS = [
-  { id: 'metamask', name: 'MetaMask', desc: 'Browser extension', ico: '🦊', bg: '#fff7ed' },
-  { id: 'rabby', name: 'Rabby', desc: 'Smart wallet & security', ico: '🐇', bg: '#f0fdf4' },
-  { id: 'coinbase', name: 'Coinbase Wallet', desc: 'Mobile & browser', ico: '🔵', bg: '#eff6ff' },
-  { id: 'walletconnect', name: 'WalletConnect', desc: 'QR code connection', ico: '🔗', bg: '#f5f3ff' },
+  { id: 'metamask',      name: 'MetaMask',        desc: 'Browser extension wallet',    bg: '#fff7ed' },
+  { id: 'rabby',         name: 'Rabby',            desc: 'Smart security wallet',       bg: '#eef0ff' },
+  { id: 'coinbase',      name: 'Coinbase Wallet',  desc: 'Mobile & browser wallet',     bg: '#eff6ff' },
+  { id: 'walletconnect', name: 'WalletConnect',    desc: 'Connect via QR code',         bg: '#f0f9ff' },
 ];
 
+/* ══════════════════════════════════════════════
+   NETWORK HELPERS
+══════════════════════════════════════════════ */
+const NETWORK_NAMES = {
+  1: 'Ethereum Mainnet', 5: 'Goerli Testnet', 11155111: 'Sepolia',
+  137: 'Polygon', 80001: 'Mumbai', 42161: 'Arbitrum One',
+  10: 'Optimism', 8453: 'Base', 56: 'BNB Chain',
+  5042002: 'Arc Testnet',
+};
+function getNetworkName(chainId) {
+  return NETWORK_NAMES[chainId] || `Chain ${chainId}`;
+}
+function getExplorerUrl(address, chainId) {
+  const explorers = {
+    1: 'https://etherscan.io/address/', 137: 'https://polygonscan.com/address/',
+    42161: 'https://arbiscan.io/address/', 10: 'https://optimistic.etherscan.io/address/',
+    8453: 'https://basescan.org/address/', 56: 'https://bscscan.com/address/',
+    5042002: 'https://scan.arc.io/address/',
+  };
+  const base = explorers[chainId] || 'https://etherscan.io/address/';
+  return base + address;
+}
+
+/* ══════════════════════════════════════════════
+   WALLET MODAL — OPEN / CLOSE
+══════════════════════════════════════════════ */
+let _dropdownOpen = false;
+
 function openWalletModal() {
+  // If already connected, do nothing (dropdown handles it)
+  if (state.connected) return;
+  closeWalletDropdown();
   showWalletList();
   document.getElementById('walletModal').classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -1418,144 +1493,217 @@ function handleModalOverlayClick(e) {
   if (e.target === document.getElementById('walletModal')) closeWalletModal();
 }
 
+/* ══════════════════════════════════════════════
+   WALLET DROPDOWN (post-connect)
+══════════════════════════════════════════════ */
+function toggleWalletDropdown(e) {
+  e.stopPropagation();
+  const wrap = document.getElementById('walletBtnWrap');
+  if (!wrap) return;
+  _dropdownOpen = !_dropdownOpen;
+  wrap.classList.toggle('open', _dropdownOpen);
+}
+function closeWalletDropdown() {
+  _dropdownOpen = false;
+  const wrap = document.getElementById('walletBtnWrap');
+  if (wrap) wrap.classList.remove('open');
+}
+// Close dropdown on outside click
+document.addEventListener('click', (e) => {
+  const wrap = document.getElementById('walletBtnWrap');
+  if (wrap && !wrap.contains(e.target)) closeWalletDropdown();
+});
+
+/* ══════════════════════════════════════════════
+   SHOW WALLET LIST
+══════════════════════════════════════════════ */
 function showWalletList() {
   document.getElementById('walletModalTitle').textContent = 'Connect a Wallet';
+  const hasEthereum = !!window.ethereum;
   document.getElementById('walletModalBody').innerHTML = `
-    <p class="modal-sub">Choose your wallet. Arc One will never auto-connect or store your session without explicit approval.</p>
+    <p class="modal-sub">Choose your wallet. Arc One will never auto-connect or store your keys.</p>
     <div class="wallet-list">
-      ${WALLET_OPTIONS.map(w => `
-        <button class="wallet-option" onclick="connectWallet('${w.id}')">
-          <div class="wallet-ico" style="background:${w.bg}">${w.ico}</div>
+      ${WALLET_OPTIONS.map(w => {
+        const isDetected = (w.id === 'metamask' || w.id === 'rabby') && hasEthereum;
+        const isCoinbase = w.id === 'coinbase' && window.ethereum?.isCoinbaseWallet;
+        const detected = isDetected || isCoinbase;
+        return `<button class="wallet-option${detected ? ' detected' : ''}" onclick="connectWallet('${w.id}')">
+          <div class="wallet-ico" style="background:${w.bg}">${WALLET_ICONS[w.id] || ''}</div>
           <div class="wallet-info">
             <div class="wallet-name">${w.name}</div>
             <div class="wallet-desc">${w.desc}</div>
           </div>
           <div class="wallet-arrow">›</div>
-        </button>`).join('')}
+        </button>`;
+      }).join('')}
     </div>
-    <div class="modal-note">🔒 Arc One never auto-connects. You approve every action. Sessions are cleared on page load.</div>`;
+    <div class="modal-note">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Arc One never auto-connects. You approve every action.
+    </div>`;
 }
 
+/* ══════════════════════════════════════════════
+   CONNECT WALLET
+══════════════════════════════════════════════ */
 async function connectWallet(walletId) {
-  // Show connecting state
+  const walletInfo = WALLET_OPTIONS.find(w => w.id === walletId);
+  // Show connecting spinner
   document.getElementById('walletModalTitle').textContent = 'Connecting…';
   document.getElementById('walletModalBody').innerHTML = `
     <div class="wallet-connecting">
-      <div class="wallet-connecting-ico">⟳</div>
-      <div class="wallet-connecting-text">Waiting for approval in ${WALLET_OPTIONS.find(w=>w.id===walletId)?.name || 'wallet'}…</div>
-      <div class="wallet-connecting-sub">Check your wallet extension for a connection request.</div>
+      <div class="wc-spinner"></div>
+      <div class="wallet-connecting-text">Waiting for ${walletInfo?.name || 'wallet'}…</div>
+      <div class="wallet-connecting-sub">Approve the connection request in your wallet extension.<br>Do not close this window.</div>
+      <div class="wc-cancel"><button class="btn btn-ghost btn-sm" onclick="showWalletList()">← Back</button></div>
     </div>`;
 
   try {
     let provider = null;
+    let accounts = [];
 
     if (walletId === 'metamask' || walletId === 'rabby') {
-      // Rabby and MetaMask both inject as window.ethereum
       if (!window.ethereum) {
-        throw new Error('No browser wallet found. Please install MetaMask or Rabby.');
+        const installUrl = walletId === 'metamask'
+          ? 'https://metamask.io/download/'
+          : 'https://rabby.io/';
+        throw new Error(`${walletInfo.name} not detected. <a href="${installUrl}" target="_blank" style="color:var(--accent)">Install it here ↗</a>`);
       }
-      // Request accounts — this prompts the user to APPROVE in the extension
-      // No auto-connect; eth_requestAccounts always requires user action
-      const accounts = await window.ethereum.request({
-        method: 'eth_requestAccounts'
-      });
-      if (!accounts || accounts.length === 0) throw new Error('No accounts returned.');
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (!accounts?.length) throw new Error('No accounts returned.');
       provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+
     } else if (walletId === 'coinbase') {
-      if (window.ethereum?.isCoinbaseWallet) {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        if (!accounts || accounts.length === 0) throw new Error('No accounts returned.');
-        provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-      } else if (window.ethereum) {
-        // Coinbase Wallet SDK sometimes shares the ethereum object
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        if (!accounts || accounts.length === 0) throw new Error('No accounts returned.');
-        provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
-      } else {
-        throw new Error('Coinbase Wallet not detected. Please install Coinbase Wallet extension or open in the Coinbase Wallet browser.');
-      }
+      if (!window.ethereum) throw new Error('Coinbase Wallet not detected. Install the Coinbase Wallet extension or open in the Coinbase Wallet browser.');
+      accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (!accounts?.length) throw new Error('No accounts returned.');
+      provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+
     } else if (walletId === 'walletconnect') {
-      // WalletConnect v2 requires a project ID. We surface a helpful message.
-      throw new Error('WalletConnect requires a Project ID. Please integrate @walletconnect/modal with your projectId from cloud.walletconnect.com, then replace this handler.');
+      throw new Error('WalletConnect integration requires a Project ID from <a href="https://cloud.walletconnect.com" target="_blank" style="color:var(--accent)">cloud.walletconnect.com ↗</a>. Add your projectId to enable QR-code connections.');
     }
 
     if (!provider) throw new Error('Could not initialise provider.');
     const signer = provider.getSigner();
     const address = await signer.getAddress();
+    const network = await provider.getNetwork();
 
-    state.connected = true;
-    state.address = address;
-    state.provider = provider;
-    state.signer = signer;
-    state.walletName = WALLET_OPTIONS.find(w => w.id === walletId)?.name || 'Wallet';
+    state.connected  = true;
+    state.address    = address;
+    state.provider   = provider;
+    state.signer     = signer;
+    state.walletName = walletInfo?.name || 'Wallet';
+    state.walletId   = walletId;
+    state.chainId    = Number(network.chainId);
 
     onWalletConnected();
     closeWalletModal();
-    updateBridge();
+    updateBridge?.();
 
     // Listen for account / chain changes
     if (window.ethereum) {
       window.ethereum.removeAllListeners?.('accountsChanged');
       window.ethereum.removeAllListeners?.('chainChanged');
       window.ethereum.on('accountsChanged', (accts) => {
-        if (!accts || accts.length === 0) { disconnectWallet(); }
+        if (!accts?.length) { disconnectWallet(); }
         else { state.address = accts[0]; onWalletConnected(); }
       });
-      window.ethereum.on('chainChanged', () => { window.location.reload(); });
+      window.ethereum.on('chainChanged', (chainIdHex) => {
+        state.chainId = parseInt(chainIdHex, 16);
+        onWalletConnected();
+      });
     }
 
   } catch (err) {
-    const msg = err?.message || 'Connection failed.';
-    const isRejected = msg.toLowerCase().includes('user rejected') ||
-                       msg.toLowerCase().includes('user denied') ||
+    const rawMsg = err?.message || 'Connection failed.';
+    const isRejected = rawMsg.toLowerCase().includes('user rejected') ||
+                       rawMsg.toLowerCase().includes('user denied') ||
                        err?.code === 4001;
-    document.getElementById('walletModalTitle').textContent = isRejected ? 'Request Rejected' : 'Connection Failed';
+    document.getElementById('walletModalTitle').textContent = isRejected ? 'Connection Rejected' : 'Connection Failed';
     document.getElementById('walletModalBody').innerHTML = `
       <div class="wallet-rejected">
         <div class="wallet-rejected-ico">${isRejected ? '🚫' : '⚠️'}</div>
-        <div class="wallet-rejected-text">${isRejected ? 'Connection rejected' : 'Could not connect'}</div>
-        <div class="wallet-rejected-sub">${isRejected ? 'You declined the connection request in your wallet.' : msg}</div>
+        <div class="wallet-rejected-text">${isRejected ? 'Request rejected' : 'Could not connect'}</div>
+        <div class="wallet-rejected-sub">${isRejected ? 'You declined the connection request in your wallet. You can try again anytime.' : rawMsg}</div>
         <button class="btn btn-primary" onclick="showWalletList()">← Try another wallet</button>
       </div>`;
   }
 }
 
+/* ══════════════════════════════════════════════
+   ON WALLET CONNECTED — update all UI
+══════════════════════════════════════════════ */
 function onWalletConnected() {
-  const short = state.address
+  const short   = state.address
     ? state.address.slice(0, 6) + '…' + state.address.slice(-4)
     : '—';
+  const netName = getNetworkName(state.chainId || 1);
+  // Generate avatar colour from address
+  const hue = state.address
+    ? parseInt(state.address.slice(2, 8), 16) % 360
+    : 200;
 
-  // Topbar
+  // ── TOPBAR: replace Connect button with connected pill + dropdown ──
   document.getElementById('walletTopStatus').innerHTML = `
-    <div class="connected-pill" onclick="showDisconnectMenu()">
-      <span class="conn-dot"></span>${short}
+    <div class="wallet-btn-wrap" id="walletBtnWrap">
+      <button class="connected-pill" onclick="toggleWalletDropdown(event)" aria-label="Wallet menu">
+        <div class="wallet-avatar" style="background:linear-gradient(135deg,hsl(${hue},70%,50%),hsl(${hue+60},70%,40%))">${short.slice(0,2)}</div>
+        <span class="conn-dot"></span>
+        <span>${short}</span>
+        <span class="pill-chevron">▾</span>
+      </button>
+      <div class="wallet-dropdown" id="walletDropdown">
+        <div class="wd-head">
+          <div class="wd-addr">${short}</div>
+          <div class="wd-net"><span class="wd-net-dot"></span>${netName} · ${state.walletName || 'Wallet'}</div>
+        </div>
+        <div class="wd-body">
+          <button class="wd-item" onclick="copyWalletAddress()">
+            <div class="wd-ico">⎘</div>Copy Address
+          </button>
+          <button class="wd-item" onclick="viewOnExplorer()">
+            <div class="wd-ico">↗</div>View on Explorer
+          </button>
+          <button class="wd-item" onclick="openSwitchNetwork()">
+            <div class="wd-ico">⛓</div>Switch Network
+          </button>
+          <div class="wd-divider"></div>
+          <button class="wd-item danger" onclick="disconnectWallet()">
+            <div class="wd-ico">⏻</div>Disconnect
+          </button>
+        </div>
+      </div>
     </div>`;
 
-  // Hero — update button and balance card
-  document.getElementById('heroConnectBtn').textContent = 'Wallet Connected ✓';
-  document.getElementById('heroConnectBtn').disabled = true;
-  document.getElementById('heroConnectBtn').style.opacity = '.7';
-  document.getElementById('heroAddr').textContent = short;
+  // ── HERO: show connected state, not a disabled button ──
+  const heroBtn = document.getElementById('heroConnectBtn');
+  heroBtn.innerHTML = `<span class="db-cta-ico" style="font-size:12px">◉</span> ${short}`;
+  heroBtn.disabled = false;
+  heroBtn.style.opacity = '1';
+  heroBtn.style.background = 'rgba(255,255,255,.15)';
+  heroBtn.style.border = '1.5px solid rgba(255,255,255,.3)';
+  heroBtn.onclick = toggleWalletDropdown;
+  document.getElementById('heroAddr').textContent = netName;
   document.getElementById('heroBalance').textContent = 'Fetching…';
-  const ethBalEl = document.getElementById('heroEthBalance');
-  if (ethBalEl) ethBalEl.textContent = '…';
+  const ethBalEl  = document.getElementById('heroEthBalance');
   const usdcBalEl = document.getElementById('heroUsdcBalance');
+  if (ethBalEl)  ethBalEl.textContent  = '…';
   if (usdcBalEl) usdcBalEl.textContent = '…';
 
-  // Swap footer
+  // ── SWAP FOOTER ──
   document.getElementById('swapFooter').innerHTML = `
     <button class="swap-btn-full" onclick="requireWallet('Swap prepared — confirm in wallet.')">Swap Tokens</button>`;
 
-  // Wallets page
+  // ── WALLETS PAGE ──
   document.getElementById('walletCardName').textContent = state.walletName;
   document.getElementById('walletCardAddr').textContent = short;
-  document.getElementById('walletCardBtn').textContent = 'Disconnect';
-  document.getElementById('walletCardBtn').onclick = disconnectWallet;
+  document.getElementById('walletCardBtn').textContent  = 'Disconnect';
+  document.getElementById('walletCardBtn').onclick      = disconnectWallet;
 
-  // Settings
+  // ── SETTINGS ──
   document.getElementById('settingsDisconnectBtn').style.display = '';
 
-  // Dashboard Recent Transactions — show empty live state
+  // ── DASHBOARD RECENT TXS ──
   document.getElementById('dashRecentTxList').innerHTML = `
     <div style="padding:28px 20px;text-align:center">
       <div style="font-size:22px;opacity:.3;margin-bottom:10px">⟳</div>
@@ -1563,9 +1711,9 @@ function onWalletConnected() {
       <div style="font-size:12px;color:var(--muted)">Your on-chain activity will appear here.</div>
     </div>`;
 
-  // Portfolio page — show connected state with live fetch placeholders
+  // ── PORTFOLIO ──
   document.getElementById('portfolioEmpty').style.display = 'none';
-  document.getElementById('portfolioData').style.display = '';
+  document.getElementById('portfolioData').style.display  = '';
   document.getElementById('portfolioChainGrid').innerHTML = `
     <div class="metric-card"><div class="metric-label">Arc Testnet</div><div class="metric-value" id="portArc">—</div><div class="metric-sub">Fetching…</div></div>
     <div class="metric-card"><div class="metric-label">Base</div><div class="metric-value">—</div><div class="metric-sub">Not fetched</div></div>
@@ -1576,7 +1724,7 @@ function onWalletConnected() {
     <div class="mini-row"><span>ETH</span><span class="val">—</span></div>
     <div class="mini-row"><span style="font-size:12px;color:var(--muted2)">Connect to a mainnet RPC to fetch live portfolio data.</span></div>`;
 
-  // Transactions page — show live empty state
+  // ── TRANSACTIONS PAGE ──
   document.getElementById('txPageBody').innerHTML = `
     <div style="padding:32px 28px;text-align:center">
       <div style="font-size:28px;opacity:.25;margin-bottom:12px">⟳</div>
@@ -1585,129 +1733,128 @@ function onWalletConnected() {
     </div>`;
   document.getElementById('exportCsvBtn').style.display = '';
 
-  // Recent Recipients — show live empty state
+  // ── RECENT RECIPIENTS ──
   document.getElementById('recentRecipientsBody').innerHTML = `
     <div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0">No recent recipients found.</div>`;
 
   fetchBalance();
 }
 
-async function fetchBalance() {
+/* ══════════════════════════════════════════════
+   DROPDOWN ACTIONS
+══════════════════════════════════════════════ */
+async function copyWalletAddress() {
+  if (!state.address) return;
   try {
-    if (!state.provider || !state.address) return;
-
-    // Fetch native ETH/chain-token balance
-    const bal = await state.provider.getBalance(state.address);
-    const eth = parseFloat(ethers.utils.formatEther(bal)).toFixed(4);
-
-    // Update ETH balance display (native chain token)
-    const heroEthEl = document.getElementById('heroEthBalance');
-    if (heroEthEl) heroEthEl.textContent = eth + ' ETH';
-
-    // Update total portfolio label with ETH amount
-    document.getElementById('heroBalance').textContent = eth + ' ETH';
-
-    // Update portfolio Arc card if visible
-    const portArc = document.getElementById('portArc');
-    if (portArc) portArc.textContent = eth + ' ETH';
-
-    // Fetch USDC balance via ERC-20 balanceOf
-    // USDC contract addresses per chain
-    const USDC_ADDRESSES = {
-      1:       '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // Ethereum mainnet
-      8453:    '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // Base mainnet
-      42161:   '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', // Arbitrum
-      10:      '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85', // Optimism
-      137:     '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359', // Polygon
-      5042002: '0x0000000000000000000000000000000000000000', // Arc Testnet placeholder
-    };
-    try {
-      const network = await state.provider.getNetwork();
-      const chainId = Number(network.chainId);
-      const USDC_ADDRESS = USDC_ADDRESSES[chainId] || USDC_ADDRESSES[8453];
-      const USDC_ABI = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
-      const usdc = new ethers.Contract(USDC_ADDRESS, USDC_ABI, state.provider);
-      const [rawBal, decimals] = await Promise.all([usdc.balanceOf(state.address), usdc.decimals()]);
-      const usdcAmt = parseFloat(ethers.utils.formatUnits(rawBal, decimals)).toFixed(2);
-      const heroUsdcEl = document.getElementById('heroUsdcBalance');
-      if (heroUsdcEl) heroUsdcEl.textContent = usdcAmt + ' USDC';
-      // Update combined balance summary
-      document.getElementById('heroBalance').textContent = eth + ' ETH · ' + usdcAmt + ' USDC';
-    } catch(usdcErr) {
-      const heroUsdcEl = document.getElementById('heroUsdcBalance');
-      if (heroUsdcEl) heroUsdcEl.textContent = '0.00 USDC';
-    }
-
+    await navigator.clipboard.writeText(state.address);
+    showToast('Address copied to clipboard', 'success');
   } catch(e) {
-    document.getElementById('heroBalance').textContent = '—';
-    const heroEthEl = document.getElementById('heroEthBalance');
-    if (heroEthEl) heroEthEl.textContent = '—';
-    const heroUsdcEl = document.getElementById('heroUsdcBalance');
-    if (heroUsdcEl) heroUsdcEl.textContent = '—';
+    showToast('Could not copy — try manually: ' + state.address, 'info');
+  }
+  closeWalletDropdown();
+}
+
+function viewOnExplorer() {
+  if (!state.address) return;
+  const url = getExplorerUrl(state.address, state.chainId || 1);
+  window.open(url, '_blank', 'noopener');
+  closeWalletDropdown();
+}
+
+function openSwitchNetwork() {
+  closeWalletDropdown();
+  // Reuse wallet modal for network switching
+  document.getElementById('walletModalTitle').textContent = 'Switch Network';
+  const NETWORKS = [
+    { id: 1,       name: 'Ethereum',    sub: 'Mainnet',    hex: '0x1'       },
+    { id: 8453,    name: 'Base',        sub: 'Mainnet',    hex: '0x2105'    },
+    { id: 42161,   name: 'Arbitrum',    sub: 'One',        hex: '0xa4b1'    },
+    { id: 10,      name: 'Optimism',    sub: 'Mainnet',    hex: '0xa'       },
+    { id: 137,     name: 'Polygon',     sub: 'Mainnet',    hex: '0x89'      },
+    { id: 5042002, name: 'Arc Testnet', sub: 'Testnet',    hex: '0x4CEB92'  },
+  ];
+  document.getElementById('walletModalBody').innerHTML = `
+    <p class="modal-sub">Select the network to switch to in your wallet.</p>
+    <div class="wallet-list">
+      ${NETWORKS.map(n => `
+        <button class="wallet-option${state.chainId === n.id ? ' detected' : ''}" onclick="switchToNetwork('${n.hex}')">
+          <div class="wallet-ico" style="background:var(--surface2);font-size:18px">⛓</div>
+          <div class="wallet-info"><div class="wallet-name">${n.name}</div><div class="wallet-desc">${n.sub}</div></div>
+          ${state.chainId === n.id ? '<div style="font-size:10px;color:var(--green);font-weight:700">Active</div>' : '<div class="wallet-arrow">›</div>'}
+        </button>`).join('')}
+    </div>`;
+  document.getElementById('walletModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+async function switchToNetwork(chainIdHex) {
+  try {
+    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: chainIdHex }] });
+    showToast('Network switched successfully', 'success');
+    closeWalletModal();
+  } catch(e) {
+    showToast('Could not switch network: ' + (e?.message || 'Unknown error'), 'error');
   }
 }
 
-function showDisconnectMenu() {
-  document.getElementById('walletModalTitle').textContent = 'Wallet Options';
-  const short = state.address ? state.address.slice(0,6)+'…'+state.address.slice(-4) : '';
-  document.getElementById('walletModalBody').innerHTML = `
-    <div class="estimate-box" style="margin-bottom:16px">
-      <div class="est-row"><span>Wallet</span><strong>${state.walletName}</strong></div>
-      <div class="est-row"><span>Address</span><strong style="font-family:var(--font-mono);font-size:11.5px">${state.address || ''}</strong></div>
-    </div>
-    <div style="display:grid;gap:8px">
-      <button class="btn btn-outline btn-full" data-addr="${state.address||''}" onclick="navigator.clipboard.writeText(this.dataset.addr).then(()=>{this.textContent='Copied ✓';setTimeout(()=>{this.textContent='Copy Address'},1500)})">Copy Address</button>
-      <button class="btn btn-danger btn-full" onclick="disconnectWallet();closeWalletModal()">Disconnect Wallet</button>
-    </div>`;
-  openWalletModal();
-}
-
+/* ══════════════════════════════════════════════
+   DISCONNECT WALLET
+══════════════════════════════════════════════ */
 function disconnectWallet() {
-  state.connected = false;
-  state.address = null;
-  state.provider = null;
-  state.signer = null;
+  closeWalletDropdown();
+  closeWalletModal();
+
+  state.connected  = false;
+  state.address    = null;
+  state.provider   = null;
+  state.signer     = null;
   state.walletName = null;
+  state.walletId   = null;
+  state.chainId    = null;
+
   if (window.ethereum?.removeAllListeners) {
     window.ethereum.removeAllListeners('accountsChanged');
     window.ethereum.removeAllListeners('chainChanged');
   }
-  // Clear any residual storage
+  // Clear any residual wallet storage
   try {
-    const keys = Object.keys(localStorage);
-    keys.forEach(k => {
-      if (['walletconnect','wc@','wagmi','connector'].some(p => k.toLowerCase().includes(p))) {
+    Object.keys(localStorage).forEach(k => {
+      if (['walletconnect','wc@','wagmi','connector'].some(p => k.toLowerCase().includes(p)))
         localStorage.removeItem(k);
-      }
     });
   } catch(e){}
 
-  // Reset UI
+  // ── Reset topbar ──
   document.getElementById('walletTopStatus').innerHTML = `
     <button class="btn btn-primary btn-sm" id="topConnectBtn" onclick="openWalletModal()">Connect Wallet</button>`;
-  document.getElementById('heroConnectBtn').textContent = 'Connect Wallet';
-  document.getElementById('heroConnectBtn').disabled = false;
-  document.getElementById('heroConnectBtn').style.opacity = '1';
-  document.getElementById('heroConnectBtn').onclick = openWalletModal;
-  document.getElementById('heroAddr').textContent = 'Wallet not connected';
+
+  // ── Reset hero ──
+  const heroBtn = document.getElementById('heroConnectBtn');
+  heroBtn.innerHTML = `<span class="db-cta-ico">◈</span> Connect Wallet`;
+  heroBtn.disabled  = false;
+  heroBtn.style.opacity    = '1';
+  heroBtn.style.background = '';
+  heroBtn.style.border     = '';
+  heroBtn.onclick = openWalletModal;
+  document.getElementById('heroAddr').textContent    = 'Wallet not connected';
   document.getElementById('heroBalance').textContent = '—';
-  const ethBalElD = document.getElementById('heroEthBalance');
-  if (ethBalElD) ethBalElD.textContent = '—';
+  const ethBalElD  = document.getElementById('heroEthBalance');
   const usdcBalElD = document.getElementById('heroUsdcBalance');
+  if (ethBalElD)  ethBalElD.textContent  = '—';
   if (usdcBalElD) usdcBalElD.textContent = '—';
 
-  // Swap footer
+  // ── Swap footer ──
   document.getElementById('swapFooter').innerHTML = `
     <button class="connect-btn-full" onclick="openWalletModal()">CONNECT WALLET</button>`;
 
-  // Wallets page
+  // ── Wallets page ──
   document.getElementById('walletCardName').textContent = 'Not Connected';
   document.getElementById('walletCardAddr').textContent = '—';
-  document.getElementById('walletCardBtn').textContent = 'Connect Wallet';
-  document.getElementById('walletCardBtn').onclick = openWalletModal;
+  document.getElementById('walletCardBtn').textContent  = 'Connect Wallet';
+  document.getElementById('walletCardBtn').onclick      = openWalletModal;
   document.getElementById('settingsDisconnectBtn').style.display = 'none';
 
-  // Dashboard Recent Transactions — clear to empty state
+  // ── Dashboard txs ──
   document.getElementById('dashRecentTxList').innerHTML = `
     <div style="padding:28px 20px;text-align:center">
       <div style="font-size:22px;opacity:.3;margin-bottom:10px">≡</div>
@@ -1715,11 +1862,11 @@ function disconnectWallet() {
       <div style="font-size:12px;color:var(--muted)">Connect your wallet to view activity</div>
     </div>`;
 
-  // Portfolio page — back to disconnected empty state
+  // ── Portfolio ──
   document.getElementById('portfolioEmpty').style.display = '';
-  document.getElementById('portfolioData').style.display = 'none';
+  document.getElementById('portfolioData').style.display  = 'none';
 
-  // Transactions page — back to disconnected empty state
+  // ── Transactions page ──
   document.getElementById('txPageBody').innerHTML = `
     <div style="padding:48px 28px;text-align:center">
       <div style="font-size:28px;opacity:.25;margin-bottom:14px">≡</div>
@@ -1729,12 +1876,49 @@ function disconnectWallet() {
     </div>`;
   document.getElementById('exportCsvBtn').style.display = 'none';
 
-  // Recent Recipients — back to disconnected state
+  // ── Recent Recipients ──
   document.getElementById('recentRecipientsBody').innerHTML = `
     <div style="font-size:13px;color:var(--muted);text-align:center;padding:16px 0">Connect wallet to see recent recipients.</div>`;
 
-  closeWalletModal();
-  updateBridge();
+  updateBridge?.();
+  showToast('Wallet disconnected', 'info');
+}
+
+async function fetchBalance() {
+  try {
+    if (!state.provider || !state.address) return;
+    const bal = await state.provider.getBalance(state.address);
+    const eth = parseFloat(ethers.utils.formatEther(bal)).toFixed(4);
+    const heroEthEl = document.getElementById('heroEthBalance');
+    if (heroEthEl) heroEthEl.textContent = eth + ' ETH';
+    document.getElementById('heroBalance').textContent = eth + ' ETH';
+    const portArc = document.getElementById('portArc');
+    if (portArc) portArc.textContent = eth + ' ETH';
+    const USDC_ADDRESSES = {
+      1:'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',8453:'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+      42161:'0xaf88d065e77c8cC2239327C5EDb3A432268e5831',10:'0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+      137:'0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359',5042002:'0x0000000000000000000000000000000000000000',
+    };
+    try {
+      const network = await state.provider.getNetwork();
+      const chainId = Number(network.chainId);
+      const USDC_ADDRESS = USDC_ADDRESSES[chainId] || USDC_ADDRESSES[8453];
+      const USDC_ABI = ['function balanceOf(address) view returns (uint256)','function decimals() view returns (uint8)'];
+      const usdc = new ethers.Contract(USDC_ADDRESS, USDC_ABI, state.provider);
+      const [rawBal, decimals] = await Promise.all([usdc.balanceOf(state.address), usdc.decimals()]);
+      const usdcAmt = parseFloat(ethers.utils.formatUnits(rawBal, decimals)).toFixed(2);
+      const heroUsdcEl = document.getElementById('heroUsdcBalance');
+      if (heroUsdcEl) heroUsdcEl.textContent = usdcAmt + ' USDC';
+      document.getElementById('heroBalance').textContent = eth + ' ETH · ' + usdcAmt + ' USDC';
+    } catch(usdcErr) {
+      const heroUsdcEl = document.getElementById('heroUsdcBalance');
+      if (heroUsdcEl) heroUsdcEl.textContent = '0.00 USDC';
+    }
+  } catch(e) {
+    document.getElementById('heroBalance').textContent = '—';
+    const heroEthEl = document.getElementById('heroEthBalance');  if (heroEthEl)  heroEthEl.textContent  = '—';
+    const heroUsdcEl = document.getElementById('heroUsdcBalance'); if (heroUsdcEl) heroUsdcEl.textContent = '—';
+  }
 }
 
 function clearSessions() {
