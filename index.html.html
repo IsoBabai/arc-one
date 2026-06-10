@@ -325,6 +325,8 @@ button,input,select,textarea{font-family:var(--font)}
 .chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
 .chip{border:1px solid var(--border2);background:var(--surface2);color:var(--muted);border-radius:100px;padding:6px 11px;font-size:11px;cursor:pointer;transition:all .15s}#aiSendBtn:disabled{opacity:.5;cursor:not-allowed}#aiInput:disabled{opacity:.7}
 .chip:hover{border-color:var(--accent-border);background:var(--accent-bg);color:var(--accent)}
+.sugg-chip{background:var(--surface2);border:1px solid var(--border2);color:var(--ink);border-radius:20px;padding:5px 11px;font-size:11.5px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:var(--font);transition:all .15s}
+.sugg-chip:hover{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent)}
 
 /* ── BRIDGE CARD ── */
 .bridge-chain-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}
@@ -1166,12 +1168,116 @@ button,input,select,textarea{font-family:var(--font)}
             <button class="btn btn-primary" id="aiSendBtn" onclick="sendAI()" style="flex-shrink:0;min-width:64px">Send</button>
           </div>
 
-          <div class="chips" id="aiChips">
-            <button class="chip" onclick="quickAI('Check my USDC balance')">💰 Check balance</button>
-            <button class="chip" onclick="quickAI('Bridge 50 USDC from Base to Arc Network')">🌉 Bridge USDC</button>
-            <button class="chip" onclick="quickAI('I want to send 10 USDC')">↗ Send USDC</button>
-            <button class="chip" onclick="quickAI('Swap USDC to ETH')">⇄ Swap tokens</button>
-            <button class="chip" onclick="quickAI('Show my recent transactions')">📋 Recent txs</button>
+          <!-- SUGGESTION PANEL — categorized commands -->
+          <div id="aiSuggestPanel" style="margin-top:4px">
+            <!-- Quick chips row (always visible) -->
+            <div id="aiChips" style="display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;-ms-overflow-style:none;flex-wrap:nowrap">
+              <button class="chip" onclick="quickAI('Check my USDC balance')">💰 Balance</button>
+              <button class="chip" onclick="aiPrefillTransfer()">↗ Transfer USDC</button>
+              <button class="chip" onclick="quickAI('Bridge 50 USDC from Base to Arc Network')">🌉 Bridge</button>
+              <button class="chip" onclick="quickAI('Swap 0.01 ETH to USDC')">⇄ Swap</button>
+              <button class="chip" onclick="quickAI('Show my recent transactions')">📋 History</button>
+              <button class="chip" onclick="toggleAISuggest()" style="background:var(--surface2);border-color:var(--border2);color:var(--muted);flex-shrink:0">⊞ All commands</button>
+            </div>
+
+            <!-- Expandable command grid -->
+            <div id="aiSuggestGrid" style="display:none;margin-top:4px;border:1.5px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface)">
+              <!-- Header -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2)">
+                <span style="font-size:12px;font-weight:700;color:var(--ink);letter-spacing:.04em">✦ COMMAND SUGGESTIONS</span>
+                <button onclick="toggleAISuggest()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);line-height:1">×</button>
+              </div>
+
+              <!-- Category: Transfer & Send -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">↗ TRANSFER & SEND</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="aiSetInput('Transfer 5 USDC to 0x...')">Transfer 5 USDC to address</button>
+                  <button class="sugg-chip" onclick="aiSetInput('Send 100 USDC to 0x1234...abcd')">Send 100 USDC</button>
+                  <button class="sugg-chip" onclick="aiSetInput('Transfer 1 USDC to 0xAbCd1234AbCd1234AbCd1234AbCd1234AbCd1234')">Quick send 1 USDC</button>
+                  <button class="sugg-chip" onclick="quickAI('Transfer 10 USDC to 0xAbCd1234AbCd1234AbCd1234AbCd1234AbCd1234')">↗ Demo transfer 10 USDC</button>
+                  <button class="sugg-chip" onclick="aiSetInput('Send all my USDC to 0x...')">Send max USDC</button>
+                  <button class="sugg-chip" onclick="aiSetInput('Who did I last send USDC to?')">Recent recipients</button>
+                </div>
+              </div>
+
+              <!-- Category: Bridge -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">🌉 BRIDGE</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="quickAI('Bridge 50 USDC from Base to Arc Network')">Bridge 50 USDC → Arc</button>
+                  <button class="sugg-chip" onclick="quickAI('Bridge 100 USDC from Ethereum to Base')">Bridge ETH → Base</button>
+                  <button class="sugg-chip" onclick="quickAI('Bridge 25 USDC from Arbitrum to Arc Network')">Bridge Arbitrum → Arc</button>
+                  <button class="sugg-chip" onclick="quickAI('What are the bridge fees from Base to Arc?')">Bridge fee estimate</button>
+                  <button class="sugg-chip" onclick="quickAI('How long does bridging take?')">Bridge time?</button>
+                  <button class="sugg-chip" onclick="quickAI('Bridge 200 USDC from Optimism to Ethereum')">Bridge OP → ETH</button>
+                </div>
+              </div>
+
+              <!-- Category: Swap -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">⇄ SWAP</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="quickAI('Swap 0.01 ETH to USDC')">Swap 0.01 ETH → USDC</button>
+                  <button class="sugg-chip" onclick="quickAI('Swap 50 USDC to ETH')">Swap 50 USDC → ETH</button>
+                  <button class="sugg-chip" onclick="quickAI('Swap 100 USDC to WBTC')">Swap USDC → WBTC</button>
+                  <button class="sugg-chip" onclick="quickAI('What is the swap fee?')">Swap fees?</button>
+                  <button class="sugg-chip" onclick="quickAI('Swap 0.5 ETH to USDC at best rate')">Best rate swap</button>
+                  <button class="sugg-chip" onclick="quickAI('Swap 1000 USDC to DAI')">Swap USDC → DAI</button>
+                </div>
+              </div>
+
+              <!-- Category: Wallet & Balance -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">💰 WALLET & BALANCE</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="quickAI('Check my USDC balance')">My USDC balance</button>
+                  <button class="sugg-chip" onclick="quickAI('Check my ETH balance')">My ETH balance</button>
+                  <button class="sugg-chip" onclick="quickAI('What is my wallet address?')">My address</button>
+                  <button class="sugg-chip" onclick="quickAI('Show my portfolio across all chains')">Full portfolio</button>
+                  <button class="sugg-chip" onclick="quickAI('What network am I on?')">Current network</button>
+                  <button class="sugg-chip" onclick="quickAI('Show all my token balances')">All balances</button>
+                </div>
+              </div>
+
+              <!-- Category: Transactions & History -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">📋 HISTORY</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="quickAI('Show my recent transactions')">Recent transactions</button>
+                  <button class="sugg-chip" onclick="quickAI('Show my last 5 USDC sends')">Last 5 sends</button>
+                  <button class="sugg-chip" onclick="quickAI('How much USDC did I send this week?')">Weekly spend</button>
+                  <button class="sugg-chip" onclick="quickAI('Show failed transactions')">Failed txns</button>
+                  <button class="sugg-chip" onclick="quickAI('Export my transaction history as CSV')">Export CSV</button>
+                </div>
+              </div>
+
+              <!-- Category: Gas & Network -->
+              <div style="padding:12px 16px;border-bottom:1px solid var(--border)">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">⛽ GAS & NETWORK</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="quickAI('What are the current gas fees on Arc?')">Arc gas fees</button>
+                  <button class="sugg-chip" onclick="quickAI('Compare gas fees across all chains')">Compare gas</button>
+                  <button class="sugg-chip" onclick="quickAI('Estimate gas for a USDC transfer on Ethereum')">ETH gas estimate</button>
+                  <button class="sugg-chip" onclick="quickAI('What networks does Arc One support?')">Supported chains</button>
+                  <button class="sugg-chip" onclick="quickAI('Is Arc Testnet down?')">Network status</button>
+                </div>
+              </div>
+
+              <!-- Category: DeFi & Info -->
+              <div style="padding:12px 16px">
+                <div style="font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:8px">ℹ️ INFO & HELP</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <button class="sugg-chip" onclick="quickAI('Get testnet USDC from faucet')">Get testnet USDC</button>
+                  <button class="sugg-chip" onclick="quickAI('How do I bridge USDC from Base to Arc?')">How to bridge</button>
+                  <button class="sugg-chip" onclick="quickAI('What is Circle CCTP?')">What is CCTP?</button>
+                  <button class="sugg-chip" onclick="quickAI('What is Arc Network?')">What is Arc?</button>
+                  <button class="sugg-chip" onclick="quickAI('How do I connect a hardware wallet?')">Hardware wallet</button>
+                  <button class="sugg-chip" onclick="quickAI('What are the fees for bridging USDC?')">Fee breakdown</button>
+                  <button class="sugg-chip" onclick="quickAI('Explain USDC native gas on Arc Testnet')">USDC as gas?</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1399,19 +1505,22 @@ const state = {
   tokenModalTarget: 'from',
 };
 
-// Clear any stale sessions on load — never auto-connect
-(function clearStaleSessions() {
+// Session persistence: attempt silent reconnect on page load
+(function tryAutoReconnect() {
   try {
-    const keys = Object.keys(localStorage);
-    const stalePatterns = ['walletconnect','wc@','wagmi','connector','connected','WALLETCONNECT','WC_'];
-    keys.forEach(k => {
-      if (stalePatterns.some(p => k.toLowerCase().includes(p.toLowerCase()))) {
-        localStorage.removeItem(k);
-      }
+    const saved = localStorage.getItem('arcone_wallet_session');
+    if (!saved) return;
+    const session = JSON.parse(saved);
+    if (!session?.walletId || !session?.address) return;
+    // Attempt silent reconnect after DOM is ready
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        autoReconnectWallet(session.walletId, session.address).catch(() => {
+          localStorage.removeItem('arcone_wallet_session');
+        });
+      }, 300);
     });
-    const sKeys = Object.keys(sessionStorage);
-    sKeys.forEach(k => sessionStorage.removeItem(k));
-  } catch(e){}
+  } catch(e) {}
 })();
 
 /* ══════════════════════════════════════════════
@@ -1569,6 +1678,64 @@ function showWalletList() {
 /* ══════════════════════════════════════════════
    CONNECT WALLET
 ══════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   AUTO-RECONNECT ON PAGE LOAD
+══════════════════════════════════════════════ */
+async function autoReconnectWallet(walletId, savedAddress) {
+  // Only supports injected wallets (MetaMask, Rabby, Coinbase)
+  if (!window.ethereum) return;
+  if (walletId === 'walletconnect') return;
+
+  try {
+    // Check if the wallet still has an authorized account (no permission prompt)
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' }); // read-only, no popup
+    if (!accounts || accounts.length === 0) {
+      localStorage.removeItem('arcone_wallet_session');
+      return;
+    }
+    // Make sure the same address is still active
+    if (accounts[0].toLowerCase() !== savedAddress.toLowerCase()) {
+      localStorage.removeItem('arcone_wallet_session');
+      return;
+    }
+
+    const walletInfo = WALLET_OPTIONS.find(w => w.id === walletId) || { name: 'Wallet' };
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+    const signer   = provider.getSigner();
+    const network  = await provider.getNetwork();
+
+    state.connected  = true;
+    state.address    = accounts[0];
+    state.provider   = provider;
+    state.signer     = signer;
+    state.walletName = walletInfo.name;
+    state.walletId   = walletId;
+    state.chainId    = Number(network.chainId);
+
+    onWalletConnected();
+    updateBridge?.();
+
+    // Re-attach change listeners
+    window.ethereum.removeAllListeners?.('accountsChanged');
+    window.ethereum.removeAllListeners?.('chainChanged');
+    window.ethereum.on('accountsChanged', (accts) => {
+      if (!accts?.length) { disconnectWallet(); }
+      else { state.address = accts[0]; onWalletConnected(); }
+    });
+    window.ethereum.on('chainChanged', (chainIdHex) => {
+      state.chainId = parseInt(chainIdHex, 16);
+      if (state.provider) state.provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+      state.signer = state.provider.getSigner();
+      onWalletConnected();
+    });
+
+    showToast('Wallet reconnected: ' + accounts[0].slice(0,6) + '…' + accounts[0].slice(-4), 'success');
+  } catch(e) {
+    // Silent fail — user will connect manually
+    localStorage.removeItem('arcone_wallet_session');
+  }
+}
+
 async function connectWallet(walletId) {
   const walletInfo = WALLET_OPTIONS.find(w => w.id === walletId);
   // Show connecting spinner
@@ -1662,6 +1829,15 @@ async function connectWallet(walletId) {
     state.walletName = walletInfo?.name || 'Wallet';
     state.walletId   = walletId;
     state.chainId    = Number(network.chainId);
+
+    // Persist session for auto-reconnect on refresh
+    try {
+      localStorage.setItem('arcone_wallet_session', JSON.stringify({
+        walletId: walletId,
+        address: address,
+        chainId: Number(network.chainId),
+      }));
+    } catch(e) {}
 
     onWalletConnected();
     closeWalletModal();
@@ -1884,17 +2060,13 @@ function disconnectWallet() {
   state.walletId   = null;
   state.chainId    = null;
 
+  // Clear persisted session
+  try { localStorage.removeItem('arcone_wallet_session'); } catch(e) {}
+
   if (window.ethereum?.removeAllListeners) {
     window.ethereum.removeAllListeners('accountsChanged');
     window.ethereum.removeAllListeners('chainChanged');
   }
-  // Clear any residual wallet storage
-  try {
-    Object.keys(localStorage).forEach(k => {
-      if (['walletconnect','wc@','wagmi','connector'].some(p => k.toLowerCase().includes(p)))
-        localStorage.removeItem(k);
-    });
-  } catch(e){}
 
   // ── Reset topbar ──
   document.getElementById('walletTopStatus').innerHTML = `
@@ -2080,11 +2252,8 @@ async function fetchBalance() {
 
 function clearSessions() {
   disconnectWallet();
-  try {
-    localStorage.clear();
-    sessionStorage.clear();
-  } catch(e){}
-  showToast('All stale sessions cleared. Please reconnect your wallet.', 'info');
+  try { localStorage.removeItem('arcone_wallet_session'); } catch(e) {}
+  showToast('Session cleared. Please reconnect your wallet.', 'info');
 }
 
 function requireWallet(msg) {
@@ -2998,8 +3167,171 @@ function buildWalletContext() {
   return `CONNECTED WALLET:\n- Address: ${state.address} (${short})\n- Network: ${chain} (chainId: ${state.chainId})\n- USDC Balance: ${usdc} USDC\n- ETH Balance: ${eth} ETH\n- Wallet: ${state.walletName}\n\nThe user\'s primary asset is USDC. Arc Network uses USDC as gas token.`;
 }
 
+/* ══════════════════════════════════════════════
+   AI IN-CHAT TRANSACTION STATE MACHINE
+══════════════════════════════════════════════ */
+const aiTxState = {
+  pending: null,  // { type: 'send'|'bridge'|'swap', data: {...} }
+};
+
+/** Build a rich in-chat transaction preview card with Confirm/Cancel buttons */
+function buildTxPreviewCard({ type, icon, title, rows, confirmLabel }) {
+  const rowsHtml = rows.map(([k, v]) =>
+    `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(99,102,241,.08);font-size:12.5px">
+      <span style="color:var(--muted)">${k}</span>
+      <strong style="color:var(--ink);font-family:var(--font-mono);font-size:12px">${v}</strong>
+    </div>`
+  ).join('');
+
+  return `<div class="ai-tx-card" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1.5px solid rgba(99,102,241,.25);border-radius:16px;padding:16px 18px;max-width:340px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span style="font-size:22px">${icon}</span>
+      <div>
+        <div style="font-family:var(--font-head);font-size:14px;font-weight:800;color:var(--ink)">${title}</div>
+        <div style="font-size:11px;color:var(--muted)">Review details before signing</div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">${rowsHtml}</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+      ⚠ Your wallet will prompt you to sign. No funds move until you approve.
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="aiConfirmTx()" style="flex:1;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:9px 0;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">
+        ✓ ${confirmLabel}
+      </button>
+      <button onclick="aiCancelTx()" style="flex:1;background:transparent;color:var(--muted);border:1.5px solid var(--border2);border-radius:10px;padding:9px 0;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font)">
+        ✕ Cancel
+      </button>
+    </div>
+  </div>`;
+}
+
+async function aiConfirmTx() {
+  const pending = aiTxState.pending;
+  if (!pending) return;
+  aiTxState.pending = null;
+
+  // Disable card buttons immediately
+  document.querySelectorAll('.ai-tx-card button').forEach(b => {
+    b.disabled = true; b.style.opacity = '0.5';
+  });
+
+  addMsg('✅ Confirmed — sending to wallet for signature…', true);
+
+  try {
+    if (pending.type === 'send') {
+      const { to, amount } = pending.data;
+      await executeUSDCTransfer(to, parseFloat(amount));
+    } else if (pending.type === 'bridge') {
+      // Pre-fill bridge form and trigger execution
+      const { fromChain, toChain, amount } = pending.data;
+      if (fromChain) chainState.bridgeFrom = fromChain;
+      if (toChain)   chainState.bridgeTo   = toChain;
+      const el = document.getElementById('bridgeAmount');
+      if (el) el.value = amount;
+      applyChainState?.(); updateBridge?.();
+      await executeBridge();
+    } else if (pending.type === 'swap') {
+      // Pre-fill swap form and trigger execution
+      const { fromToken, toToken, amount } = pending.data;
+      if (fromToken) { state.fromToken = TOKENS.find(t => t.sym === fromToken) || state.fromToken; }
+      if (toToken)   { state.toToken   = TOKENS.find(t => t.sym === toToken)   || state.toToken; }
+      const el = document.getElementById('swapFromAmt');
+      if (el) { el.value = amount; updateSwapCalc?.(); }
+      await executeSwap();
+    }
+  } catch(err) {
+    addMsg('❌ Transaction failed: ' + (err?.message || 'Unknown error'), false);
+  }
+}
+
+function aiCancelTx() {
+  aiTxState.pending = null;
+  document.querySelectorAll('.ai-tx-card button').forEach(b => {
+    b.disabled = true; b.style.opacity = '0.4';
+  });
+  addMsg('Transaction cancelled.', false);
+}
+
+/** Parse AI response for SEND/BRIDGE/SWAP intents and inject in-chat confirm card */
+function parseAndInjectTxCard(text) {
+  // Detect ACTION tags for prefillSend/prefillBridge/prefillSwap
+  const actionMatch = /<ACTION>([\s\S]*?)<\/ACTION>/g;
+  let m;
+  while ((m = actionMatch.exec(text)) !== null) {
+    try {
+      const action = JSON.parse(m[1]);
+      if (action.type === 'prefillSend' && action.to && action.amount) {
+        const amt  = parseFloat(action.amount);
+        const fee  = 0.02;
+        const total = (amt + fee).toFixed(2);
+        aiTxState.pending = { type: 'send', data: { to: action.to, amount: action.amount } };
+        return buildTxPreviewCard({
+          type: 'send',
+          icon: '↗',
+          title: 'Send USDC',
+          confirmLabel: 'Confirm Send',
+          rows: [
+            ['Amount', amt.toFixed(2) + ' USDC'],
+            ['To', action.to.slice(0,8) + '…' + action.to.slice(-6)],
+            ['Network', getNetworkName(state.chainId || 1)],
+            ['Estimated fee', '≈ ' + fee.toFixed(2) + ' USDC'],
+            ['Total', '≈ ' + total + ' USDC'],
+          ]
+        });
+      }
+      if (action.type === 'prefillBridge' && action.amount) {
+        const amt = parseFloat(action.amount);
+        const fee = +(amt * 0.0038 + 0.18).toFixed(2);
+        const recv = Math.max(0, amt - fee).toFixed(2);
+        const from = action.fromChain || 'base';
+        const to   = action.toChain   || 'arc';
+        aiTxState.pending = { type: 'bridge', data: { fromChain: from, toChain: to, amount: action.amount } };
+        return buildTxPreviewCard({
+          type: 'bridge',
+          icon: '🌉',
+          title: 'Bridge USDC via CCTP',
+          confirmLabel: 'Confirm Bridge',
+          rows: [
+            ['Amount', amt.toFixed(2) + ' USDC'],
+            ['From', from.charAt(0).toUpperCase() + from.slice(1)],
+            ['To', to.charAt(0).toUpperCase() + to.slice(1)],
+            ['Bridge fee', '≈ ' + fee + ' USDC'],
+            ['You receive', '≈ ' + recv + ' USDC'],
+            ['ETA', '2–4 minutes'],
+          ]
+        });
+      }
+      if (action.type === 'prefillSwap' && action.amount) {
+        const amt = parseFloat(action.amount);
+        const from = action.fromToken || 'USDC';
+        const to   = action.toToken   || 'ETH';
+        const ETH_PRICE = 3400;
+        let est = amt;
+        if (from === 'USDC' && to === 'ETH') est = amt / ETH_PRICE;
+        else if (from === 'ETH' && to === 'USDC') est = amt * ETH_PRICE;
+        else est = amt * 0.997;
+        aiTxState.pending = { type: 'swap', data: { fromToken: from, toToken: to, amount: action.amount } };
+        return buildTxPreviewCard({
+          type: 'swap',
+          icon: '⇄',
+          title: 'Swap Tokens',
+          confirmLabel: 'Confirm Swap',
+          rows: [
+            ['You pay', amt.toFixed(4) + ' ' + from],
+            ['You receive (est.)', est.toFixed(from === 'USDC' ? 6 : 4) + ' ' + to],
+            ['Fee', (amt * 0.003).toFixed(4) + ' ' + from + ' (0.3%)'],
+            ['Network', getNetworkName(state.chainId || 1)],
+          ]
+        });
+      }
+    } catch(e) {}
+  }
+  return null; // no tx card needed
+}
+
 function buildSystemPrompt() {
-  return `You are Arc One\'s AI wallet assistant \u2014 a smart, concise, action-oriented crypto copilot built into the Arc One DeFi dashboard.\n\n${buildWalletContext()}\n\nAPP CAPABILITIES (actions you can trigger by returning JSON tool calls):\nYou can trigger real UI actions in the app. When you want to trigger an action, include it at the END of your message as a JSON block inside <ACTION> tags, like:\n<ACTION>{"type":"navigate","page":"swap"}</ACTION>\n\nAvailable actions:\n- <ACTION>{"type":"navigate","page":"swap"}</ACTION> \u2014 open swap tab\n- <ACTION>{"type":"navigate","page":"send"}</ACTION> \u2014 open send page\n- <ACTION>{"type":"navigate","page":"bridge"}</ACTION> \u2014 open bridge tab\n- <ACTION>{"type":"navigate","page":"buy"}</ACTION> \u2014 open buy tab\n- <ACTION>{"type":"navigate","page":"dashboard"}</ACTION>\n- <ACTION>{"type":"navigate","page":"transactions"}</ACTION>\n- <ACTION>{"type":"openWalletModal"}</ACTION> \u2014 prompt wallet connection\n- <ACTION>{"type":"prefillSend","to":"<address>","amount":"<amount>"}</ACTION> \u2014 prefill send form\n- <ACTION>{"type":"prefillBridge","fromChain":"base","toChain":"arc","amount":"<amount>"}</ACTION> \u2014 prefill bridge form\n- <ACTION>{"type":"prefillSwap","fromToken":"USDC","toToken":"ETH","amount":"<amount>"}</ACTION> \u2014 prefill swap form\n- <ACTION>{"type":"showBalance"}</ACTION> \u2014 display live balances inline\n\nWHEN THE USER WANTS TO EXECUTE A TRANSACTION:\nIf the user provides all required info (recipient + amount for send, or chain + amount for bridge, or tokens + amount for swap), prefill the form AND tell them the form is ready — say something like "I\'ve prefilled the Send form with [amount] USDC to [address]. Review the details and click Send to sign with your wallet."\n\nFor SEND: ask for recipient address if missing, then use prefillSend action.\nFor BRIDGE: ask for source chain if missing, then use prefillBridge action.\nFor SWAP: ask for amount if missing, then use prefillSwap action.\n\nDo NOT redirect users away unnecessarily. Complete the action in-context.\n\nBEHAVIOR RULES:\n1. Be concise \u2014 1-3 sentences max unless showing data tables\n2. When user asks to DO something (send, bridge, swap), trigger the action AND explain what you did\n3. When user asks for balance \u2014 show their actual numbers from the wallet context above\n4. NEVER pretend to sign transactions \u2014 always confirm wallet will prompt them\n5. For bridge: Arc Network \u2194 Base via Circle CCTP (2-4 min, ~0.38 USDC fee)\n6. Security: always remind user to verify details before confirming in wallet\n7. Respond in the same language the user writes in\n8. Buy/Card features are coming soon \u2014 inform users if they ask\n\nRESPONSE FORMAT:\n- Plain conversational text\n- Use emoji sparingly for key actions (\u2705 \u274c \u26a1 \ud83d\udcb0 \ud83c\udf09)\n- For balance queries: show the numbers clearly\n- Always end with what the user should do next if action is needed`;
+  return `You are Arc One's AI wallet assistant — a smart, concise, action-oriented crypto copilot built into the Arc One DeFi dashboard.\n\n${buildWalletContext()}\n\nAPP CAPABILITIES (actions you can trigger by returning JSON tool calls):\nYou can trigger real UI actions in the app. When you want to trigger an action, include it at the END of your message as a JSON block inside <ACTION> tags, like:\n<ACTION>{"type":"navigate","page":"swap"}</ACTION>\n\nAvailable actions:\n- <ACTION>{"type":"navigate","page":"swap"}</ACTION> — open swap tab\n- <ACTION>{"type":"navigate","page":"send"}</ACTION> — open send page\n- <ACTION>{"type":"navigate","page":"bridge"}</ACTION> — open bridge tab\n- <ACTION>{"type":"navigate","page":"buy"}</ACTION> — open buy tab\n- <ACTION>{"type":"navigate","page":"dashboard"}</ACTION>\n- <ACTION>{"type":"navigate","page":"transactions"}</ACTION>\n- <ACTION>{"type":"openWalletModal"}</ACTION> — prompt wallet connection\n- <ACTION>{"type":"prefillSend","to":"<address>","amount":"<amount>"}</ACTION> — show in-chat confirm card for USDC transfer\n- <ACTION>{"type":"prefillBridge","fromChain":"base","toChain":"arc","amount":"<amount>"}</ACTION> — show in-chat confirm card for bridge\n- <ACTION>{"type":"prefillSwap","fromToken":"USDC","toToken":"ETH","amount":"<amount>"}</ACTION> — show in-chat confirm card for swap\n- <ACTION>{"type":"showBalance"}</ACTION> — display live balances inline\n\nIN-CHAT TRANSACTION FLOW (IMPORTANT):\nWhen a user says things like "transfer 5 USDC to 0x...", "send 10 USDC to 0xABC...", "move 50 USDC to address 0x...", you MUST:\n1. Parse the amount and recipient address from the message\n2. Reply with a brief confirmation message summarizing what you're about to do\n3. Append the prefillSend ACTION tag — this shows an in-chat confirmation card with Confirm/Cancel buttons\n4. The user will click "Confirm" in the chat — ONLY THEN will the wallet signature be triggered\n5. NEVER navigate away or open the Send page — keep everything in the chat\n\nExample: User says "Transfer 5 USDC to 0xAbCd1234AbCd1234AbCd1234AbCd1234AbCd1234"\nYou reply: "I'll prepare a transfer of 5 USDC to 0xAbCd…1234. Review the details below and click Confirm to proceed — your wallet will then prompt you to sign."\nThen include: <ACTION>{"type":"prefillSend","to":"0xAbCd1234AbCd1234AbCd1234AbCd1234AbCd1234","amount":"5"}</ACTION>\n\nIf the address is missing, ask: "What address should I send to?"\nIf the amount is missing, ask: "How much USDC would you like to send?"\n\nFor BRIDGE: If user says "bridge 50 USDC from Base to Arc", use prefillBridge action inline.\nFor SWAP: If user says "swap 0.01 ETH to USDC", use prefillSwap action inline.\n\nBEHAVIOR RULES:\n1. Be concise — 1-3 sentences max unless showing data tables\n2. When user asks to DO something (send, bridge, swap), trigger the action in-chat with a confirm card\n3. When user asks for balance — show their actual numbers from the wallet context above\n4. NEVER pretend to sign transactions — the confirm card requires explicit user click\n5. For bridge: Arc Network ↔ Base via Circle CCTP (2-4 min, ~0.38 USDC fee)\n6. Security: always show the recipient address (first 8 + last 6 chars) in your reply so user can verify\n7. Respond in the same language the user writes in\n8. Buy/Card features are coming soon — inform users if they ask\n\nRESPONSE FORMAT:\n- Plain conversational text\n- Use emoji sparingly for key actions (✅ ❌ ⚡ 💰 🎉)\n- For balance queries: show the numbers clearly\n- Always end with what the user should do next if action is needed`;
 }
 
 function parseAndExecuteActions(text) {
@@ -3029,13 +3361,16 @@ function executeAIAction(action) {
       break;
     case 'openWalletModal': openWalletModal(); break;
     case 'prefillSend':
-      go('send');
-      setTimeout(() => {
-        const toEl  = document.getElementById('sendTo');
-        const amtEl = document.getElementById('sendAmount');
-        if (toEl  && action.to)     toEl.value  = action.to;
-        if (amtEl && action.amount) { amtEl.value = action.amount; updateSendFee?.(); }
-      }, 300);
+      // Stay in AI chat — the in-chat confirm card handles the flow
+      // Only navigate if explicitly asked or no card was generated
+      if (!action._stayInChat) {
+        setTimeout(() => {
+          const toEl  = document.getElementById('sendTo');
+          const amtEl = document.getElementById('sendAmount');
+          if (toEl  && action.to)     toEl.value  = action.to;
+          if (amtEl && action.amount) { amtEl.value = action.amount; updateSendFee?.(); }
+        }, 300);
+      }
       break;
     case 'prefillBridge':
       go('swap'); setSwapTab('bridge');
@@ -3126,8 +3461,8 @@ function generateSmartFallback(text) {
 
   // Send — check before balance since "send 10 usdc" contains usdc
   if (/\bsend\b|\btransfer\b|\bpay\b/.test(t)) {
-    const amtM = t.match(/(\d+\.?\d*)\s*usdc/);
-    const toM  = t.match(/to\s+(0x[a-f0-9]{4,})/i);
+    const amtM = t.match(/(\d+\.?\d*)\s*usdc/i);
+    const toM  = t.match(/to\s+(0x[a-fA-F0-9]{40})/i);
     const amt  = amtM ? amtM[1] : '';
     const to   = toM ? toM[1] : '';
     if (!state.connected) {
@@ -3135,6 +3470,22 @@ function generateSmartFallback(text) {
     }
     const fee = 0.02;
     const total = amt ? (+amt + fee).toFixed(2) : fee.toFixed(2);
+    // If we have both address and amount, build an in-chat confirm card
+    if (amt && to) {
+      const action = {type:'prefillSend', to, amount:amt};
+      aiTxState.pending = { type: 'send', data: { to, amount: amt } };
+      const card = buildTxPreviewCard({
+        type: 'send', icon: '↗', title: 'Send USDC', confirmLabel: 'Confirm Transfer',
+        rows: [
+          ['Amount', (+amt).toFixed(2) + ' USDC'],
+          ['To', to.slice(0,8) + '…' + to.slice(-6)],
+          ['Network', getNetworkName(state.chainId || 1)],
+          ['Estimated fee', '≈ ' + fee.toFixed(2) + ' USDC'],
+          ['Total', '≈ ' + total + ' USDC'],
+        ]
+      });
+      return { raw:`Prepared transfer of ${amt} USDC to ${to.slice(0,8)}…${to.slice(-6)}. Review and confirm.`, text: card, isHTML: true, action };
+    }
     return { raw:`Opening send form${amt?' for '+amt+' USDC':''}…`, text: buildActionCard('↗', 'Send USDC' + (amt ? ` — ${amt} USDC` : ''), `${amt ? `Amount: ${amt} USDC\nNetwork fee: ≈${fee} USDC\nTotal debit: ≈${total} USDC` : 'Enter amount and recipient on the Send page.'}\n\nNo transaction is signed without your wallet confirmation.`, [{label:'Open Send Form', onclick:"go('send')"}]), isHTML: true, action: {type:'prefillSend', to, amount:amt} };
   }
 
@@ -3257,8 +3608,16 @@ async function sendAI() {
     // Add AI reply to history
     aiHistory.push({ role: 'assistant', content: raw });
 
-    // Render the clean text
-    addMsg(cleanText, false);
+    // Try to generate an in-chat tx confirm card from ACTION tags
+    const txCard = parseAndInjectTxCard(raw);
+    if (txCard) {
+      // Strip action tags from visible text, then show card
+      const visibleText = cleanText.replace(/<ACTION>[\s\S]*?<\/ACTION>/g, '').trim();
+      if (visibleText) addMsg(visibleText, false);
+      addMsg(txCard, false, null, true);
+    } else {
+      addMsg(cleanText, false);
+    }
 
     // Speak if voice was active
     if (!ttsMuted && cleanText) {
@@ -3271,7 +3630,15 @@ async function sendAI() {
     const fallback = generateSmartFallback(text);
     aiHistory.push({ role: 'assistant', content: fallback.raw });
     if (fallback.action) executeAIAction(fallback.action);
-    addMsg(fallback.text, false, null, fallback.isHTML);
+    const catchCard = fallback.action && (fallback.action.type === 'prefillSend' || fallback.action.type === 'prefillBridge' || fallback.action.type === 'prefillSwap')
+      ? parseAndInjectTxCard('<ACTION>' + JSON.stringify(fallback.action) + '</ACTION>')
+      : null;
+    if (catchCard) {
+      addMsg(fallback.text, false, null, fallback.isHTML);
+      addMsg(catchCard, false, null, true);
+    } else {
+      addMsg(fallback.text, false, null, fallback.isHTML);
+    }
   }
 
   inp.disabled = false;
@@ -3281,6 +3648,38 @@ async function sendAI() {
 }
 
 function quickAI(text) { go('ai'); document.getElementById('aiInput').value = text; sendAI(); }
+
+/* ── Suggestion panel toggle ── */
+function toggleAISuggest() {
+  const grid = document.getElementById('aiSuggestGrid');
+  if (!grid) return;
+  const isOpen = grid.style.display !== 'none';
+  grid.style.display = isOpen ? 'none' : 'block';
+}
+
+/* ── Set text in AI input without sending ── */
+function aiSetInput(text) {
+  go('ai');
+  const inp = document.getElementById('aiInput');
+  if (inp) { inp.value = text; inp.focus(); }
+  // close suggestion panel
+  const grid = document.getElementById('aiSuggestGrid');
+  if (grid) grid.style.display = 'none';
+}
+
+/* ── Open transfer helper: prefill input with template ── */
+function aiPrefillTransfer() {
+  go('ai');
+  const inp = document.getElementById('aiInput');
+  if (inp) {
+    inp.value = 'Transfer 5 USDC to 0x';
+    inp.focus();
+    // place cursor at end so user can type the address
+    inp.setSelectionRange(inp.value.length, inp.value.length);
+  }
+  const grid = document.getElementById('aiSuggestGrid');
+  if (grid) grid.style.display = 'none';
+}
 
 /* ══════════════════════════════════════════════
    GAS / EXPLORER / MISC
@@ -3367,7 +3766,7 @@ const FOOTER_PAGES = {
     body: `
       <div style="display:flex;flex-direction:column;gap:18px">
         <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px">What is Arc One?</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Arc One is a non-custodial AI-powered wallet dashboard built on Arc Network — Circle's stablecoin-native L1 blockchain. It enables sending, swapping, and bridging assets across multiple chains.</div></div>
-        <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px">How do I connect my wallet?</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Click "Connect Wallet" in the topbar or dashboard. You can connect MetaMask, Rabby, Coinbase Wallet, or WalletConnect. You must manually choose a wallet — Arc One never auto-connects.</div></div>
+        <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px">How do I connect my wallet?</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Click "Connect Wallet" in the topbar or dashboard. You can connect MetaMask, Rabby, Coinbase Wallet, or WalletConnect. Arc One remembers your last wallet and reconnects automatically on refresh. You can disconnect at any time from the wallet dropdown.</div></div>
         <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px">What chains are supported?</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Arc One supports Arc Testnet (Chain 5042002), Ethereum, Base, Arbitrum, Optimism, and Polygon. More chains are added regularly.</div></div>
         <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px">Are there any fees?</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Arc One charges zero platform fees. Gas fees on Arc Testnet are paid in USDC and average ~$0.02 per transaction — significantly lower than Ethereum mainnet.</div></div>
         <div><div style="font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px">How does the AI Assistant work?</div><div style="font-size:13px;color:var(--muted);line-height:1.7">The AI Assistant helps you prepare transactions, estimate gas, plan bridge routes, and understand on-chain activity using plain English. It never signs anything without explicit wallet approval.</div></div>
@@ -3381,7 +3780,7 @@ const FOOTER_PAGES = {
         <p><strong style="color:var(--ink)">Last updated: June 2026</strong></p>
         <p>Arc One is a non-custodial wallet interface. We do not collect, store, or have access to your private keys, seed phrases, or wallet credentials at any time.</p>
         <p><strong style="color:var(--ink)">Data we collect:</strong> We may collect anonymized usage analytics (pages viewed, features used) to improve the product. We do not sell or share this data with third parties for advertising purposes.</p>
-        <p><strong style="color:var(--ink)">Wallet connections:</strong> Wallet connection data is stored only in your local browser session. We clear all stale sessions on every page load. Arc One never auto-connects to prevent unauthorized access.</p>
+        <p><strong style="color:var(--ink)">Wallet connections:</strong> Wallet connection data is stored locally in your browser. Arc One remembers your last wallet so you don&#39;t need to reconnect on every visit. You can disconnect at any time from the wallet menu.</p>
         <p><strong style="color:var(--ink)">On-chain data:</strong> All blockchain transactions are public by nature of the Arc Network. Arc One does not add any additional layer of tracking beyond what is inherent to blockchain technology.</p>
         <p><strong style="color:var(--ink)">Third-party services:</strong> We use Circle's CCTP for bridging and third-party RPC endpoints for blockchain connectivity. These services have their own privacy policies.</p>
         <p>For privacy inquiries, contact us at <a href="mailto:privacy@arc.network" style="color:var(--accent)">privacy@arc.network</a>.</p>
